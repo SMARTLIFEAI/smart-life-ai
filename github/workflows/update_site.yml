@@ -1,27 +1,36 @@
-name: AI Ultimate Auto Update  # ここを画面の表示名に合わせました
+name: AI Ultimate Auto Update
 
 on:
-  workflow_dispatch: # これで「Run workflow」ボタンが出ます
+  workflow_dispatch:
 
 jobs:
-  build:
+  update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: AI Processing
-        uses: google-github-actions/setup-gcloud@v2 # もしくは特定のAI連携Action
-        # ここにプロンプトを直接埋め込みます
+      - name: Gemini AI Full Rewrite
+        uses: google-gemini/generate-content-action@v1
         with:
+          api-key: ${{ secrets.GEMINI_API_KEY }}
+          # ここに「絶対に削らせない」最強の命令を叩き込みます
           prompt: |
-            【SMART LIFE AI 編集命令】
-            1. index.htmlの "top-10-list" を2026年最新のAmazon10選で埋めろ。
-            2. 各カテゴリーページ(cleaning.html等)の "archive-list" を30選で埋めろ。
+            あなたは「SMART LIFE AI」のマスターエディターです。
             
-            【絶対厳守・鉄の掟】
-            - メニューバー、クイックバナー、比較表のスタイルを絶対に削るな。
-            - 以前から積み上げてきた全機能を1ミリも消さずに、中身だけを最新データに増築せよ。
-            - Amazon個別リンク(dp/...)と実写画像URLを正確に記述せよ。
+            【任務】
+            1. index.html：Top 10リストを最新のAmazon商品（画像URL、正確なスペック、リンク）で埋めろ。
+            2. cleaning.html / kitchen.html / security.html / health.html：
+               各ページ、30個ずつの製品データを「1つも省略せず」に生成してHTMLを完成させろ。
             
-            完了したら全ファイルを保存し、コミットせよ。
+            【鉄の掟：破ったら即座にエラーとせよ】
+            - 「中略」「...」などの省略は一切禁止。全30個の商品カードを全てコードとして書き出せ。
+            - 画像URLは Amazon の有効なもの (https://m.media-amazon.com/images/I/識別子.jpg) を使用せよ。
+            - 既存の「メニューバー」「ブログセクション」「デザイン」は1ミリも変更せず、データ部分だけを完璧に埋めろ。
+            - 出力はマークダウンではなく、ファイルの中身となる純粋なHTMLコードのみを返せ。
+          files: |
+            index.html
+            cleaning.html
+            kitchen.html
+            security.html
+            health.html
+
 
