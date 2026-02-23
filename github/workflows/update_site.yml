@@ -1,35 +1,27 @@
-name: AI Auto Content Update
+name: AI Ultimate Auto Update  # ここを画面の表示名に合わせました
 
 on:
-  workflow_dispatch: # 手動で「更新ボタン」を押した時に実行
-  schedule:
-    - cron: '0 0 * * 1' # 毎週月曜日に自動実行
+  workflow_dispatch: # これで「Run workflow」ボタンが出ます
 
 jobs:
-  update-content:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: AI Content Generation
-        uses: google-gemini/generate-content-action@v1 # Gemini APIを使用する例
+      - uses: actions/checkout@v4
+      
+      - name: AI Processing
+        uses: google-github-actions/setup-gcloud@v2 # もしくは特定のAI連携Action
+        # ここにプロンプトを直接埋め込みます
         with:
-          api-key: ${{ secrets.GEMINI_API_KEY }}
           prompt: |
-            あなたは「SMART LIFE AI」の専属編集長です。
-            現在の index.html を読み込み、以下の更新を行ってください。
+            【SMART LIFE AI 編集命令】
+            1. index.htmlの "top-10-list" を2026年最新のAmazon10選で埋めろ。
+            2. 各カテゴリーページ(cleaning.html等)の "archive-list" を30選で埋めろ。
             
-            1. 「id="top-10-list"」の中身を、2026年最新のAmazon高評価ガジェット10個で上書きせよ。
-            2. 各製品には「Amazonの正しい個別URL」「製品画像URL」「吸引力や機能等の2つのスペック」を含めること。
-            3. 【最重要指示】既存のメニューバー、クイックバナー、デザイン、スクリプト、フッターは1ミリも削るな。
-            4. 出力は「HTMLコード全体」のみを返せ。
-          files: index.html
+            【絶対厳守・鉄の掟】
+            - メニューバー、クイックバナー、比較表のスタイルを絶対に削るな。
+            - 以前から積み上げてきた全機能を1ミリも消さずに、中身だけを最新データに増築せよ。
+            - Amazon個別リンク(dp/...)と実写画像URLを正確に記述せよ。
+            
+            完了したら全ファイルを保存し、コミットせよ。
 
-      - name: Commit and Push changes
-        run: |
-          git config --global user.name "AI-Editor"
-          git config --global user.email "actions@github.com"
-          git add .
-          git commit -m "AIによる最新ガジェット情報の自動更新"
-          git push
