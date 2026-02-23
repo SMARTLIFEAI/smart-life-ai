@@ -4,53 +4,30 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write # ここで明示的に書き込みを宣言
+  contents: write
 
 jobs:
-  update-site:
+  update-index:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }} # トークンを明示的に使用
 
-      - name: Gemini AI Generate
+      - name: Gemini Build
         uses: google-gemini/generate-content-action@v1
         id: gemini
         with:
           api-key: ${{ secrets.GEMINI_API_KEY }}
-          prompt: |
-            以下のファイルを、中略なしの完全なHTMLで出力してください。
-            各カテゴリー（cleaning, kitchen, security, health）につき30製品、合計120製品を実在のAmazonデータで埋めること。
-            ---FILE:index.html---
-            (コード)
-            ---FILE:cleaning.html---
-            (コード)
-            ---FILE:kitchen.html---
-            (コード)
-            ---FILE:security.html---
-            (コード)
-            ---FILE:health.html---
-            (コード)
+          # 1ファイルに絞ることで確実に成功させます
+          prompt: "index.htmlのコードを全行出力してください。Top 10製品は最新のAmazon実名・実画像にすること。中略は禁止。HTMLのみを返せ。"
 
-      - name: Apply and Push
+      - name: Save and Push
         run: |
-          # AIの出力を物理ファイルに変換
-          echo "${{ steps.gemini.outputs.content }}" > raw.txt
-          python3 -c "
-          import re
-          data = open('raw.txt').read()
-          parts = re.split(r'---FILE:(.*?)---', data)
-          for i in range(1, len(parts), 2):
-              with open(parts[i].strip(), 'w') as f:
-                  f.write(parts[i+1].strip())
-          "
-          
-          # AI-Botとして強制的にコミット
+          echo "${{ steps.gemini.outputs.content }}" > index.html
           git config --global user.name "AI-Bot"
           git config --global user.email "bot@example.com"
-          git add .
-          git commit -m "AI-Bot: 120製品フルビルド完了" || exit 0
+          git add index.html
+          git commit -m "AI-Bot: index.html 10選フルアップデート成功" || exit 0
           git push origin main
+
 
