@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>スマート・モノ | 暮らしの知性を比較する</title>
+    <title>SMART HOME AI CONCIERGE</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,7 +13,7 @@
             --アクセント: #0066cc;
             --境界: #d2d2d7;
             --背景-淡: #f5f5f7;
-            --透過-白: rgba(255, 255, 255, 0.8);
+            --透過-白: rgba(255, 255, 255, 0.85);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,7 +34,7 @@
         .grid-layer {
             position: absolute; width: 100%; height: 200%;
             background-image: linear-gradient(var(--背景-淡) 1px, transparent 1px), linear-gradient(90deg, var(--背景-淡) 1px, transparent 1px);
-            background-size: 100px 100px; opacity: 0.4;
+            background-size: 80px 80px; opacity: 0.4;
         }
 
         /* --- ナビゲーション --- */
@@ -47,9 +47,11 @@
             max-width: 1024px; margin: 0 auto; display: flex;
             justify-content: space-between; align-items: center; padding: 0 22px; height: 100%;
         }
-        .logo { font-weight: 700; font-size: 19px; cursor: pointer; letter-spacing: -0.02em; }
+        .logo { 
+            font-weight: 700; font-size: 14px; cursor: pointer; 
+            letter-spacing: 0.15em; color: var(--文字-主); text-transform: uppercase;
+        }
         
-        /* デスクトップメニュー */
         .nav-links { display: flex; gap: 32px; height: 100%; }
         .nav-item { position: relative; display: flex; align-items: center; }
         .nav-item > a { font-size: 12px; font-weight: 400; color: var(--文字-主); text-decoration: none; opacity: 0.8; cursor: pointer; transition: 0.3s; }
@@ -62,69 +64,66 @@
         }
         @keyframes menuFade { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .nav-item:hover .mega-menu { display: block; }
-        .menu-content { max-width: 1024px; margin: 0 auto; display: flex; gap: 80px; padding: 0 40px; }
-        .menu-column { display: flex; flex-direction: column; gap: 12px; }
+        .menu-content { max-width: 1024px; margin: 0 auto; display: flex; gap: 60px; padding: 0 40px; }
+        .menu-column { display: flex; flex-direction: column; gap: 10px; }
         .menu-label { font-size: 11px; color: var(--文字-副); font-weight: 500; margin-bottom: 4px; }
-        .menu-column a { font-size: 14px; font-weight: 600; color: var(--文字-主); text-decoration: none; cursor: pointer; }
+        .menu-column a { font-size: 13px; font-weight: 600; color: var(--文字-主); text-decoration: none; cursor: pointer; }
         .menu-column a:hover { color: var(--アクセント); }
 
-        /* ハンバーガーメニュー（縦画面用） */
+        /* モバイル対応 */
         .menu-toggle { display: none; flex-direction: column; gap: 4px; cursor: pointer; padding: 10px; }
         .menu-toggle span { width: 18px; height: 1px; background: var(--文字-主); transition: 0.3s; }
-        
         .mobile-menu {
             position: fixed; top: 48px; left: 0; width: 100%; height: 0; 
             background: var(--白); overflow: hidden; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: column; padding: 0 40px; z-index: 9998;
         }
         .mobile-menu.active { height: 100vh; padding-top: 40px; }
-        .mobile-link { font-size: 28px; font-weight: 600; text-decoration: none; color: var(--文字-主); margin-bottom: 24px; opacity: 0; transform: translateY(20px); transition: 0.4s; }
+        .mobile-link { font-size: 24px; font-weight: 600; text-decoration: none; color: var(--文字-主); margin-bottom: 20px; opacity: 0; transform: translateY(20px); transition: 0.4s; }
         .mobile-menu.active .mobile-link { opacity: 1; transform: translateY(0); }
 
-        /* --- ページ共通 --- */
+        /* --- コンテンツレイアウト --- */
         .page { display: none; padding-top: 48px; min-height: 100vh; animation: fadeIn 0.8s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- カタログセクション --- */
-        .hero-section { text-align: center; padding: 80px 20px; }
-        .hero-section h1 { font-size: 56px; font-weight: 700; letter-spacing: -0.02em; }
-        .hero-section p { font-size: 24px; color: var(--文字-副); margin-top: 10px; }
+        .hero-section { text-align: center; padding: 100px 20px 60px; }
+        .hero-section h1 { font-size: clamp(40px, 8vw, 64px); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 20px; }
+        .hero-section p { font-size: clamp(18px, 4vw, 24px); color: var(--文字-副); max-width: 700px; margin: 0 auto; }
 
         .product-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px; max-width: 1200px; margin: 0 auto; padding: 40px 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px; max-width: 1200px; margin: 0 auto; padding: 40px 20px 120px;
         }
         .product-card {
-            background: #fff; border-radius: 28px; padding: 60px; text-align: center;
-            transition: 0.4s cubic-bezier(0.15, 0, 0.2, 1);
+            background: rgba(255,255,255,0.7); border-radius: 24px; padding: 50px 40px; text-align: center;
+            transition: 0.4s cubic-bezier(0.15, 0, 0.2, 1); border: 1px solid var(--境界);
+            backdrop-filter: blur(10px);
         }
-        .product-card:hover { transform: scale(1.01); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-        .product-card img { width: 100%; height: 300px; object-fit: contain; margin-bottom: 40px; }
-        .product-card h2 { font-size: 28px; margin-bottom: 8px; }
-        .product-card .price { color: var(--文字-副); margin-bottom: 24px; font-size: 17px; }
+        .product-card:hover { transform: scale(1.02); background: #fff; box-shadow: 0 30px 60px rgba(0,0,0,0.08); }
+        .product-card img { width: 100%; height: 240px; object-fit: contain; margin-bottom: 30px; }
+        .product-card h2 { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+        .product-card .price { color: var(--文字-副); font-size: 15px; margin-bottom: 20px; }
 
-        /* --- 比較ツール --- */
-        .compare-header { max-width: 1024px; margin: 0 auto; padding: 80px 22px 40px; text-align: center; }
-        .compare-ui { max-width: 1024px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 0 22px 100px; }
-        .select-wrapper { margin-bottom: 40px; }
-        .spec-row { border-top: 1px solid var(--境界); padding: 40px 0; text-align: center; }
-        .spec-val { font-size: 32px; font-weight: 700; display: block; }
-        .spec-label { font-size: 12px; font-weight: 700; color: var(--アクセント); text-transform: uppercase; margin-top: 8px; display: block; }
-        .spec-desc { font-size: 14px; color: var(--文字-副); margin-top: 12px; padding: 0 20px; }
+        /* --- 比較 UI --- */
+        .compare-ui { max-width: 1024px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 0 20px 100px; }
+        .spec-item { border-top: 1px solid var(--境界); padding: 40px 0; text-align: center; }
+        .spec-val { font-size: 28px; font-weight: 700; display: block; }
+        .spec-label { font-size: 11px; font-weight: 700; color: var(--アクセント); text-transform: uppercase; margin-top: 5px; display: block; letter-spacing: 0.1em; }
+        .spec-desc { font-size: 13px; color: var(--文字-副); margin-top: 10px; line-height: 1.6; }
 
         /* ボタン */
-        .btn-blue { background: var(--アクセント); color: #fff; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 500; display: inline-block; }
-        .link-more { color: var(--アクセント); text-decoration: none; font-size: 14px; margin-top: 12px; display: block; }
+        .btn-blue { background: var(--アクセント); color: #fff; padding: 10px 24px; border-radius: 980px; text-decoration: none; font-size: 14px; font-weight: 500; display: inline-block; transition: 0.2s; }
+        .btn-blue:hover { opacity: 0.9; transform: scale(1.05); }
+        .link-more { color: var(--アクセント); text-decoration: none; font-size: 14px; margin-top: 15px; display: block; cursor: pointer; }
+        .link-more:hover { text-decoration: underline; }
 
-        /* --- レスポンシブ --- */
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .menu-toggle { display: flex; }
-            .hero-section h1 { font-size: 40px; }
             .product-grid { grid-template-columns: 1fr; }
-            .compare-ui { grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 10px; }
-            .spec-val { font-size: 20px; }
+            .compare-ui { gap: 10px; }
+            .spec-val { font-size: 18px; }
         }
     </style>
 </head>
@@ -136,7 +135,7 @@
 
 <header>
     <div class="nav-container">
-        <div class="logo" onclick="showPage('top')">スマート・モノ</div>
+        <div class="logo" onclick="showPage('top')">SMART HOME AI CONCIERGE</div>
         
         <nav class="nav-links">
             <div class="nav-item">
@@ -146,8 +145,7 @@
                         <div class="menu-column">
                             <span class="menu-label">モデルを見る</span>
                             <a onclick="showPage('cleaning_list')">すべての掃除機</a>
-                            <a>Roomba Combo 10 Max</a>
-                            <a>Roborock S8 MaxV Ultra</a>
+                            <a>Roomba</a><a>Roborock</a><a>Anker</a><a>SwitchBot</a>
                         </div>
                         <div class="menu-column">
                             <span class="menu-label">検討する</span>
@@ -163,8 +161,7 @@
                         <div class="menu-column">
                             <span class="menu-label">モデルを見る</span>
                             <a onclick="showPage('lighting_list')">すべての照明</a>
-                            <a>Philips Hue</a>
-                            <a>Nanoleaf</a>
+                            <a>Philips Hue</a><a>Nanoleaf</a><a>SwitchBot</a>
                         </div>
                         <div class="menu-column">
                             <span class="menu-label">検討する</span>
@@ -180,8 +177,7 @@
                         <div class="menu-column">
                             <span class="menu-label">モデルを見る</span>
                             <a onclick="showPage('security_list')">すべてのカメラ</a>
-                            <a>Arlo Pro 5</a>
-                            <a>Google Nest Cam</a>
+                            <a>Arlo</a><a>Google Nest</a><a>Ring</a><a>Eufy</a>
                         </div>
                         <div class="menu-column">
                             <span class="menu-label">検討する</span>
@@ -207,19 +203,19 @@
 <main>
     <div id="top" class="page active">
         <section class="hero-section">
-            <h1 style="font-size: clamp(40px, 10vw, 80px);">暮らしを、選ぶ。</h1>
-            <p>プロの視点とデータで、理想の知性を導き出す。</p>
+            <h1>暮らしを、選ぶ。</h1>
+            <p>SMART HOME AI CONCIERGEが、<br>あなたの日常に最適な「知性」を導き出します。</p>
         </section>
         <div class="product-grid">
             <div class="product-card" onclick="showPage('cleaning_list')">
-                <span class="menu-label" style="display:block; margin-bottom: 20px;">NEW</span>
-                <h2>CLEANING</h2>
-                <p>掃除の概念を、過去にする。</p>
+                <span class="menu-label" style="display:block; margin-bottom: 10px;">CLEANING</span>
+                <h2>掃除の概念を、過去にする。</h2>
+                <p class="price">最新のロボット掃除機を見る ＞</p>
             </div>
             <div class="product-card" onclick="showPage('lighting_list')">
-                <span class="menu-label" style="display:block; margin-bottom: 20px;">ART</span>
-                <h2>LIGHTING</h2>
-                <p>光の質で、感情を描き出す。</p>
+                <span class="menu-label" style="display:block; margin-bottom: 10px;">LIGHTING</span>
+                <h2>光を、感情のままに。</h2>
+                <p class="price">スマート照明のラインナップを見る ＞</p>
             </div>
         </div>
     </div>
@@ -233,20 +229,14 @@
     </div>
 
     <div id="comparePage" class="page">
-        <div class="compare-header">
-            <h1>モデルを比較する。</h1>
-        </div>
+        <div class="hero-section"><h1>モデルを比較する。</h1></div>
         <div class="compare-ui">
             <div class="comp-col">
-                <div class="select-wrapper">
-                    <select id="selL" onchange="renderCompare('L')" style="width:100%; padding:10px; border-radius:10px; border:1px solid var(--境界); font-weight:600;"></select>
-                </div>
+                <select id="selL" onchange="renderCompare('L')" style="width:100%; padding:12px; border-radius:12px; margin-bottom:30px;"></select>
                 <div id="colL"></div>
             </div>
             <div class="comp-col">
-                <div class="select-wrapper">
-                    <select id="selR" onchange="renderCompare('R')" style="width:100%; padding:10px; border-radius:10px; border:1px solid var(--境界); font-weight:600;"></select>
-                </div>
+                <select id="selR" onchange="renderCompare('R')" style="width:100%; padding:12px; border-radius:12px; margin-bottom:30px;"></select>
                 <div id="colR"></div>
             </div>
         </div>
@@ -256,114 +246,71 @@
 <script>
     const database = {
         cleaning: {
-            title: "掃除機",
-            sub: "掃除を、忘れるための究極。",
+            title: "掃除機", sub: "掃除を、忘れるための究極。",
             products: {
-                roomba10: { name: "Roomba Combo 10 Max", price: "197,800", img: "https://i.imgur.com/vHq7FfM.png",
-                    specs: [{v: "AutoWash", l: "DOCK", d: "モップ洗浄から乾燥まで完全に自立した知性。"}, {v: "パッド昇降", l: "CARPET", d: "カーペットを濡らさない、唯一無二の構造。"}] },
-                roborockS8: { name: "Roborock S8 MaxV Ultra", price: "188,000", img: "https://i.imgur.com/K1V3zLd.png",
-                    specs: [{v: "10,000Pa", l: "SUCTION", d: "業界最強の吸引力で、微細な埃も描き出す。"}, {v: "サイドモップ", l: "EDGE", d: "壁際1mmまで磨き上げる、徹底したこだわり。"}] }
+                r10: { name: "Roomba Combo 10 Max", price: "197,800", img: "https://i.imgur.com/vHq7FfM.png", specs: [{v: "AutoWash", l: "DOCK", d: "モップ洗浄から乾燥まで完全に自立。"}, {v: "パッド昇降", l: "CARPET", d: "カーペットを一切濡らさない唯一の構造。"}] },
+                s8: { name: "Roborock S8 MaxV Ultra", price: "188,000", img: "https://i.imgur.com/K1V3zLd.png", specs: [{v: "10,000Pa", l: "SUCTION", d: "業界最強の吸引力で微細な埃も描き出す。"}, {v: "サイドモップ", l: "EDGE", d: "壁際1mmまで磨き上げる徹底したこだわり。"}] },
+                x10: { name: "Eufy X10 Pro Omni", price: "99,990", img: "https://i.imgur.com/vHq7FfM.png", specs: [{v: "最強コスパ", l: "VALUE", d: "全自動ドックを、すべての人に。"}, {v: "AI回避", l: "VISION", d: "100以上の障害物を正確に認識。"}] },
+                k10: { name: "SwitchBot K10+", price: "59,800", img: "https://i.imgur.com/K1V3zLd.png", specs: [{v: "世界最小級", l: "SIZE", d: "日本の家具の間をすり抜ける知性。"}, {v: "静音設計", l: "SILENT", d: "夜間でも気にならない静かな清掃。"}] },
+                j9: { name: "Roomba j9+", price: "129,800", img: "https://i.imgur.com/vHq7FfM.png", specs: [{v: "吸引力2倍", l: "POWER", d: "カーペットの奥のゴミまで逃さない。"}, {v: "障害物保証", l: "PET", d: "ペットの排泄物を回避。万が一の保証も。"}] }
             }
         },
         lighting: {
-            title: "照明",
-            sub: "光を、調律する。",
+            title: "照明", sub: "光を、調律する。",
             products: {
-                hue: { name: "Philips Hue", price: "16,800", img: "https://i.imgur.com/O6L5UuR.png",
-                    specs: [{v: "1,600万色", l: "COLOR", d: "感情まで描き出す、圧倒的な光の再現性。"}, {v: "映像同期", l: "SYNC", d: "映画や音楽と連動し、没入感を最大化。"}] },
-                nanoleaf: { name: "Nanoleaf Shapes", price: "28,500", img: "https://i.imgur.com/LIFX.png", // placeholder
-                    specs: [{v: "タッチ操作", l: "INTERACTIVE", d: "壁を光のアートに変え、触れて操作する。"}, {v: "自由な形状", l: "DESIGN", d: "パネルを組み合わせて、自分だけの光をデザイン。"}] }
+                hue: { name: "Philips Hue フルカラー", price: "16,800", img: "https://i.imgur.com/O6L5UuR.png", specs: [{v: "1,600万色", l: "COLOR", d: "感情まで描き出す圧倒的な再現性。"}, {v: "Zigbee", l: "STABLE", d: "プロが選ぶ、遅延のない安定した接続。"}] },
+                nano: { name: "Nanoleaf Shapes", price: "28,500", img: "https://i.imgur.com/O6L5UuR.png", specs: [{v: "触れる光", l: "TOUCH", d: "壁をアートに変え、触れて操作する。"}, {v: "音楽同期", l: "RHYTHM", d: "リズムに合わせて光が踊り出す。"}] },
+                sb_l: { name: "SwitchBot シーリングライト", price: "9,980", img: "https://i.imgur.com/O6L5UuR.png", specs: [{v: "ハブ機能", l: "HUB", d: "照明が家中の家電の司令塔になる。"}, {v: "取付5分", l: "EASY", d: "日本のソケットにそのまま設置可能。"}] }
             }
         },
         security: {
-            title: "防犯",
-            sub: "安心を、デザインする。",
+            title: "防犯", sub: "安心を、デザインする。",
             products: {
-                arlo: { name: "Arlo Pro 5", price: "34,800", img: "https://i.imgur.com/E8R8XvX.png",
-                    specs: [{v: "2K HDR", l: "VISION", d: "深夜の暗闇も、昼間のように鮮明に捉える。"}, {v: "高精度AI", l: "INTELLIGENCE", d: "人、車両、荷物を判別し、価値ある通知だけを。"}] }
+                arlo: { name: "Arlo Pro 5", price: "34,800", img: "https://i.imgur.com/E8R8XvX.png", specs: [{v: "2K HDR", l: "VISION", d: "深夜も昼間のように鮮明に捉える。"}, {v: "完全無線", l: "FREE", d: "どこにでも設置できる自由な安心。"}] },
+                nest: { name: "Google Nest Cam", price: "23,900", img: "https://i.imgur.com/E8R8XvX.png", specs: [{v: "顔認識", l: "AI", d: "誰が来たかを名前で教えてくれる。"}, {v: "履歴確認", l: "HISTORY", d: "過去の出来事を映画のように振り返る。"}] },
+                ring: { name: "Ring Doorbell Plus", price: "24,980", img: "https://i.imgur.com/E8R8XvX.png", specs: [{v: "上下150度", l: "VIEW", d: "足元の荷物まで死角なく見守る。"}, {v: "Alexa連携", l: "AMAZON", d: "声だけで玄関先を確認できる。"}] }
             }
         }
     };
 
-    let currentCat = '';
-
+    let curCat = '';
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        closeMobileMenu();
-
-        if(id === 'top') {
-            document.getElementById('top').classList.add('active');
-        } else {
-            const [cat, mode] = id.split('_');
-            currentCat = cat;
-            const data = database[cat];
-
+        document.getElementById('mobileMenu').classList.remove('active');
+        if(id === 'top') { document.getElementById('top').classList.add('active'); }
+        else {
+            const [cat, mode] = id.split('_'); curCat = cat; const data = database[cat];
             if(mode === 'list') {
                 document.getElementById('catTitle').innerText = data.title;
                 document.getElementById('catSub').innerText = data.sub;
-                let html = '';
-                for(let key in data.products) {
-                    const p = data.products[key];
-                    html += `
-                        <div class="product-card">
-                            <img src="${p.img}">
-                            <h2>${p.name}</h2>
-                            <p class="price">${p.price}円（税込）から</p>
-                            <a href="#" class="btn-blue">購入</a>
-                            <a onclick="showPage('${cat}_compare')" class="link-more" style="cursor:pointer">比較する ＞</a>
-                        </div>`;
+                let html = ''; for(let k in data.products) { const p = data.products[k];
+                    html += `<div class="product-card"><img src="${p.img}"><h2>${p.name}</h2><p class="price">${p.price}円〜</p>
+                    <a href="#" class="btn-blue">購入</a><a onclick="showPage('${cat}_compare')" class="link-more">比較する ＞</a></div>`;
                 }
-                document.getElementById('catGrid').innerHTML = html;
-                document.getElementById('catalogPage').classList.add('active');
+                document.getElementById('catGrid').innerHTML = html; document.getElementById('catalogPage').classList.add('active');
             } else {
-                const selL = document.getElementById('selL');
-                const selR = document.getElementById('selR');
                 const keys = Object.keys(data.products);
-                selL.innerHTML = selR.innerHTML = keys.map(k => `<option value="${k}">${data.products[k].name}</option>`).join('');
-                selR.selectedIndex = keys.length > 1 ? 1 : 0;
-                renderCompare('L'); renderCompare('R');
+                document.getElementById('selL').innerHTML = document.getElementById('selR').innerHTML = keys.map(k=>`<option value="${k}">${data.products[k].name}</option>`).join('');
+                document.getElementById('selR').selectedIndex = 1; renderCompare('L'); renderCompare('R');
                 document.getElementById('comparePage').classList.add('active');
             }
         }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({top:0, behavior:'smooth'});
     }
 
-    function renderCompare(side) {
-        const key = document.getElementById(`sel${side}`).value;
-        const p = database[currentCat].products[key];
-        document.getElementById(`col${side}`).innerHTML = `
-            <img src="${p.img}" style="width:100%; height:200px; object-fit:contain; margin: 20px 0;">
-            <div style="text-align:center; margin-bottom:40px;">
-                <a href="#" class="btn-blue">購入</a>
-                <a href="#" class="link-more">さらに詳しく</a>
-            </div>
-            ${p.specs.map(s => `
-                <div class="spec-row">
-                    <span class="spec-val">${s.v}</span>
-                    <span class="spec-label">${s.l}</span>
-                    <p class="spec-desc">${s.d}</p>
-                </div>
-            `).join('')}
-        `;
+    function renderCompare(s) {
+        const k = document.getElementById(`sel${s}`).value; const p = database[curCat].products[k];
+        document.getElementById(`col${s}`).innerHTML = `<img src="${p.img}" style="height:180px; object-fit:contain; margin-bottom:20px;">
+        <div style="margin-bottom:30px;"><a href="#" class="btn-blue">購入</a><a href="#" class="link-more">詳細</a></div>
+        ${p.specs.map(sp=>`<div class="spec-item"><span class="spec-val">${sp.v}</span><span class="spec-label">${sp.l}</span><p class="spec-desc">${sp.d}</p></div>`).join('')}`;
     }
 
-    function toggleMobileMenu() {
-        const m = document.getElementById('mobileMenu');
-        const t = document.getElementById('menuToggle');
-        m.classList.toggle('active');
-        t.classList.toggle('active');
-    }
-    function closeMobileMenu() {
-        document.getElementById('mobileMenu').classList.remove('active');
-    }
-
-    window.onscroll = () => {
-        const y = window.pageYOffset;
-        document.getElementById('bgGrid').style.transform = `translateY(${y * 0.15}px)`;
-    };
+    function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('active'); }
+    window.onscroll = () => { document.getElementById('bgGrid').style.transform = `translateY(${window.pageYOffset * 0.15}px)`; };
 </script>
 </body>
 </html>
+
 
 
 
