@@ -7,81 +7,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap');
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #ffffff; 
-            color: #121212; 
-            scroll-behavior: smooth;
-        }
-
-        /* 独自：モノトーン・テック・ナビ */
-        .tech-nav { 
-            background: rgba(255, 255, 255, 0.8); 
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid #eee;
-        }
-
-        /* 独自：ネオン・アクセントのボタン */
-        .btn-buy {
-            background: #121212;
-            color: #fff;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            font-family: 'JetBrains+Mono', monospace;
-        }
-        .btn-buy:hover {
-            background: #444;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        /* 独自：クイックバナー（グリッド感を出したミニマル設計） */
-        .quick-link {
-            border: 1px solid #e5e7eb;
-            transition: all 0.3s ease;
-        }
-        .quick-link:hover {
-            background: #fafafa;
-            border-color: #000;
-        }
-
-        /* 独自：10製品スペック比較（よりデータ重視な密度） */
-        .spec-grid {
-            border-top: 1px solid #f0f0f0;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            text-align: left;
-        }
-        .spec-item {
-            margin-bottom: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            border-bottom: 1px dotted #e5e7eb;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #121212; scroll-behavior: smooth; }
+        .tech-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(16px); border-bottom: 1px solid #eee; }
+        .btn-buy { background: #121212; color: #fff; transition: 0.3s; font-family: 'JetBrains Mono', monospace; }
+        .btn-buy:hover { background: #444; transform: translateY(-2px); }
+        .quick-link { border: 1px solid #e5e7eb; transition: 0.3s; }
+        .quick-link:hover { background: #fafafa; border-color: #000; }
+        .spec-grid { border-top: 1px solid #f0f0f0; margin-top: 1.5rem; padding-top: 1.5rem; text-align: left; }
+        .spec-item { margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px dotted #e5e7eb; }
         .spec-v { font-weight: 700; font-size: 0.95rem; }
         .spec-l { font-size: 0.65rem; color: #999; text-transform: uppercase; font-weight: 800; }
-
-        /* 独自：巨大ゲート（半透過レイヤーとタイポグラフィの融合） */
-        .gate-box {
-            position: relative; height: 450px; border-radius: 24px; overflow: hidden;
-            background: #000;
-        }
-        .gate-img { 
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.6;
-            transition: transform 1s ease;
-        }
+        .gate-box { position: relative; height: 450px; border-radius: 24px; overflow: hidden; background: #000; }
+        .gate-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: transform 1s ease; }
         .gate-box:hover .gate-img { transform: scale(1.05); opacity: 0.8; }
-        .gate-text {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            padding: 40px; background: linear-gradient(transparent, rgba(0,0,0,0.9));
-        }
-
+        .gate-text { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
         .chat-pulse { position: relative; }
-        .chat-pulse::after { 
-            content: ''; position: absolute; width: 8px; height: 8px; background: #00ff41; 
-            border-radius: 50%; right: 0; top: 0; animation: pulse 2s infinite; 
-        }
+        .chat-pulse::after { content: ''; position: absolute; width: 8px; height: 8px; background: #00ff41; border-radius: 50%; right: 0; top: 0; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
     </style>
 </head>
@@ -90,18 +31,17 @@
     <nav class="fixed top-0 w-full tech-nav z-[100] h-14 flex items-center justify-between px-8">
         <a href="index.html" class="font-extrabold text-xl tracking-tighter uppercase italic">Smart Life AI</a>
         <div class="hidden lg:flex space-x-8 text-[10px] font-black uppercase tracking-widest text-gray-400">
-            <a href="#top10" class="hover:text-black">Analysis 10</a>
-            <a href="cleaning.html" class="hover:text-black">Cleaning</a>
-            <a href="kitchen.html" class="hover:text-black">Kitchen</a>
-            <a href="security.html" class="hover:text-black">Security</a>
-            <a href="health.html" class="hover:text-black">Health</a>
-            <a href="#journal" class="hover:text-black">Journal</a>
+            <a href="#top10" class="hover:text-black transition">Analysis 10</a>
+            <a href="cleaning.html" class="hover:text-black transition">Cleaning</a>
+            <a href="kitchen.html" class="hover:text-black transition">Kitchen</a>
+            <a href="security.html" class="hover:text-black transition">Security</a>
+            <a href="health.html" class="hover:text-black transition">Health</a>
+            <a href="#journal" class="hover:text-black transition">Journal</a>
         </div>
     </nav>
 
     <header class="pt-40 pb-16 text-center px-6">
         <h1 class="text-5xl md:text-8xl font-extrabold tracking-tighter leading-[0.9] mb-10">家事を、<br>AIに解放する。</h1>
-        
         <div class="max-w-3xl mx-auto flex flex-wrap justify-center gap-3">
             <a href="cleaning.html" class="quick-link px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-tighter">Cleaning / 30 items</a>
             <a href="kitchen.html" class="quick-link px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-tighter">Kitchen / 30 items</a>
@@ -111,71 +51,73 @@
     </header>
 
     <section id="top10" class="max-w-[1500px] mx-auto px-6 py-24 border-t border-gray-100">
-        <div class="flex justify-between items-end mb-16">
-            <div>
-                <h2 class="text-3xl font-black italic tracking-tighter uppercase">The Top 10 Selection</h2>
-                <p class="text-xs text-gray-400 font-bold tracking-widest uppercase mt-2">Data-Driven Comparative Analysis</p>
-            </div>
+        <div class="mb-16">
+            <h2 class="text-3xl font-black italic tracking-tighter uppercase">The Top 10 Selection</h2>
+            <p class="text-xs text-gray-400 font-bold tracking-widest uppercase mt-2">Data-Driven Comparative Analysis</p>
         </div>
         
-        <div id="top-10-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/61NlUoNfBvL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8" alt="Roborock">
-                <h3 class="font-bold text-lg leading-tight mb-4">Roborock S8 Pro</h3>
-                <a href="https://www.amazon.co.jp/dp/B0C6XY7G8F?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Get at Amazon</a>
-                
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all">
+                <img src="https://m.media-amazon.com/images/I/61NlUoNfBvL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8">
+                <h3 class="font-bold text-lg mb-4">Roborock S8 Pro</h3>
+                <a href="https://www.amazon.co.jp/dp/B0C6XY7G8F?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
                 <div class="spec-grid">
                     <div class="spec-item"><span class="spec-l">Suction</span><span class="spec-v">10,000Pa</span></div>
-                    <div class="spec-item"><span class="spec-l">Auto-Clean</span><span class="spec-v">Full Setup</span></div>
+                    <div class="spec-item"><span class="spec-l">Mop</span><span class="spec-v">Dual Sonic</span></div>
                 </div>
             </div>
-            <div class="p-6 border border-gray-100 border-dashed rounded-3xl flex items-center justify-center text-gray-300 text-xs italic">Awaiting AI update...</div>
-        </div>
-    </section>
-
-    <section id="categories" class="max-w-[1500px] mx-auto px-6 py-32 bg-gray-50">
-        <h2 class="text-center text-xs font-black tracking-[0.5em] text-gray-300 uppercase mb-16">Deep Dive into Specialized Archives</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <a href="cleaning.html" class="gate-box">
-                <img src="https://m.media-amazon.com/images/I/61NlUoNfBvL._AC_SL1500_.jpg" class="gate-img" alt="Cleaning">
-                <div class="gate-text">
-                    <span class="text-white/50 text-[10px] font-bold tracking-widest uppercase">Archive 01</span>
-                    <h3 class="text-4xl font-extrabold text-white">Cleaning Selection 30</h3>
+            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all">
+                <img src="https://m.media-amazon.com/images/I/51wXkY7vSFL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8">
+                <h3 class="font-bold text-lg mb-4">Lock Pro</h3>
+                <a href="https://www.amazon.co.jp/dp/B0CTH6DPRR?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
+                <div class="spec-grid">
+                    <div class="spec-item"><span class="spec-l">Auth</span><span class="spec-v">Fingerprint</span></div>
+                    <div class="spec-item"><span class="spec-l">Battery</span><span class="spec-v">270 Days</span></div>
                 </div>
-            </a>
-            <a href="kitchen.html" class="gate-box">
-                <img src="https://m.media-amazon.com/images/I/61SOnC11D9L._AC_SL1500_.jpg" class="gate-img" alt="Kitchen">
-                <div class="gate-text">
-                    <span class="text-white/50 text-[10px] font-bold tracking-widest uppercase">Archive 02</span>
-                    <h3 class="text-4xl font-extrabold text-white">Kitchen Selection 30</h3>
+            </div>
+            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all">
+                <img src="https://m.media-amazon.com/images/I/61SOnC11D9L._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8">
+                <h3 class="font-bold text-lg mb-4">Cook4me Touch</h3>
+                <a href="https://www.amazon.co.jp/dp/B0B6Z9J7L4?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
+                <div class="spec-grid">
+                    <div class="spec-item"><span class="spec-l">Recipes</span><span class="spec-v">250+</span></div>
+                    <div class="spec-item"><span class="spec-l">Control</span><span class="spec-v">Full App</span></div>
                 </div>
-            </a>
-        </div>
+            </div>
+            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all">
+                <img src="https://m.media-amazon.com/images/I/51D6M0UeXWL._AC_SL1200_.jpg" class="h-40 w-full object-contain mb-8">
+                <h3 class="font-bold text-lg mb-4">Dyson V15</h3>
+                <a href="https://www.amazon.co.jp/dp/B09575LGYL?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
+                <div class="spec-grid">
+                    <div class="spec-item"><span class="spec-l">Laser</span><span class="spec-v">Detection</span></div>
+                    <div class="spec-item"><span class="spec-l">Run Time</span><span class="spec-v">60 Mins</span></div>
+                </div>
+            </div>
+            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all">
+                <img src="https://m.media-amazon.com/images/I/61z-v6hR2PL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8">
+                <h3 class="font-bold text-lg mb-4">Hue White & Color</h3>
+                <a href="https://www.amazon.co.jp/dp/B08M9BPC8V?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
+                <div class="spec-grid">
+                    <div class="spec-item"><span class="spec-l">Colors</span><span class="spec-v">16M+</span></div>
+                    <div class="spec-item"><span class="spec-l">Sync</span><span class="spec-v">Music/TV</span></div>
+                </div>
+            </div>
+            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all">
+                <img src="https://m.media-amazon.com/images/I/718tSg0iZcL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8">
+                <h3 class="font-bold text-lg mb-4">EcoFlow DELTA 2</h3>
+                <a href="https://www.amazon.co.jp/dp/B0B9XF5R9X?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
+                <div class="spec-grid">
+                    <div class="spec-item"><span class="spec-l">Capacity</span><span class="spec-v">1024Wh</span></div>
+                    <div class="spec-item"><span class="spec-l">Output</span><span class="spec-v">1500W</span></div>
+                </div>
+            </div>
+            </div>
     </section>
 
-    <section id="journal" class="py-40 max-w-4xl mx-auto px-6">
-        <h2 class="text-xs font-black tracking-[0.5em] text-gray-300 uppercase mb-20 text-center">Journal</h2>
-        <div id="blog-list">
-            <a href="article1.html" class="group">
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Feb 2026 / Case Study</p>
-                <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter group-hover:text-gray-500 transition leading-none">2026年、AIが変える<br>「家事ゼロ」の暮らし</h3>
-                <p class="mt-8 text-lg text-gray-400 font-light leading-relaxed">最新の自律型ロボットとGemini 3 Flashが共生する未来について、独自の視点で深掘りする。</p>
-            </a>
-        </div>
-    </section>
-
-    <div class="fixed bottom-8 right-8 z-[200]">
-        <button class="bg-black text-white p-6 rounded-full shadow-2xl chat-pulse">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-        </button>
-    </div>
-
-    <footer class="py-20 text-center text-[10px] font-black tracking-[0.4em] uppercase text-gray-200">
-        &copy; 2026 SMART LIFE AI. All Commitments Integrated.
-    </footer>
-
+    <footer class="py-20 text-center text-[10px] font-black tracking-[0.4em] text-gray-200">© 2026 SMART LIFE AI. All Integrated.</footer>
 </body>
 </html>
+
 
 
 
