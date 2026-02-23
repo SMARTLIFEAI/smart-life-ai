@@ -23,11 +23,11 @@
             -webkit-font-smoothing: antialiased; overflow-x: hidden;
         }
 
-        /* --- 基礎演出（絶対不変） --- */
+        /* --- 基礎演出 --- */
         .parallax-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .grid-layer { position: absolute; width: 100%; height: 200%; background-image: linear-gradient(var(--背景-淡) 1px, transparent 1px), linear-gradient(90deg, var(--背景-淡) 1px, transparent 1px); background-size: 80px 80px; opacity: 0.4; }
 
-        /* --- ヘッダー（Apple流クリック展開 & 横書き固定） --- */
+        /* --- ヘッダー --- */
         header {
             position: fixed; top: 0; width: 100%; z-index: 10000;
             background: var(--透過-白); backdrop-filter: saturate(180%) blur(20px);
@@ -46,23 +46,21 @@
         .nav-item { display: flex; align-items: center; }
         .nav-item > a { font-size: 12px; font-weight: 400; color: var(--文字-主); text-decoration: none; opacity: 0.8; cursor: pointer; }
 
-        /* メガメニュー：横書きグリッドを徹底 */
+        /* メガメニュー */
         .mega-menu {
             position: fixed; top: 44px; left: 0; width: 100%; background: var(--白);
             border-bottom: 1px solid var(--境界); display: none; padding: 50px 0; 
             z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        .mega-menu.active { display: block; }
         .menu-content { 
             max-width: 1024px; margin: 0 auto; padding: 0 40px;
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; /* 横書きグリッド */
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
         }
         .menu-column { display: flex; flex-direction: column; gap: 15px; }
-        .menu-label { font-size: 11px; color: var(--文字-副); font-weight: 600; letter-spacing: 0.1em; }
+        .menu-label { font-size: 11px; color: var(--文字-副); font-weight: 600; }
         .menu-column a { font-size: 14px; font-weight: 600; color: var(--文字-主); text-decoration: none; cursor: pointer; }
-        .menu-column a:hover { color: var(--アクセント); }
 
-        /* 三本線（独立復旧） */
+        /* 三本線（独立） */
         .menu-toggle { margin-left: auto; z-index: 10002; cursor: pointer; display: flex; flex-direction: column; gap: 4px; padding: 10px; }
         .menu-toggle span { width: 18px; height: 1px; background: var(--文字-主); transition: 0.3s; }
         .mobile-nav { 
@@ -76,29 +74,21 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* TOP 3段構成 */
-        .top-section { 
-            height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            text-align: center; padding: 20px; transition: 0.8s;
-        }
-        .top-section h2 { font-size: 48px; font-weight: 700; margin-bottom: 10px; }
-
-        /* 比較 UI（完全水平同期・10項目） */
+        /* TOP 3段 */
+        .top-section { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; }
+        
+        /* 比較グリッド */
         .compare-grid { 
-            display: grid; grid-template-columns: 200px 1fr 1fr; gap: 2px; background: var(--境界); 
-            max-width: 1100px; margin: 0 auto; border: 1px solid var(--境界);
+            display: grid; grid-template-columns: 220px 1fr 1fr; gap: 1px; background: var(--境界); 
+            max-width: 1100px; margin: 20px auto; border: 1px solid var(--境界);
         }
-        .comp-head, .comp-cell { background: var(--白); padding: 25px 20px; display: flex; flex-direction: column; justify-content: center; }
-        .comp-label { font-size: 11px; font-weight: 700; color: var(--アクセント); }
-        .comp-val { font-size: 18px; font-weight: 600; margin-top: 5px; }
-        .comp-desc { font-size: 12px; color: var(--文字-副); margin-top: 4px; line-height: 1.4; }
+        .comp-cell { background: var(--白); padding: 25px 20px; display: flex; flex-direction: column; justify-content: center; }
+        .comp-label { font-size: 10px; font-weight: 700; color: var(--アクセント); letter-spacing: 0.1em; text-transform: uppercase; }
+        .comp-val { font-size: 16px; font-weight: 600; margin-top: 5px; }
 
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 1100px; margin: 40px auto; padding: 0 20px; }
-        .card { background: var(--白); border-radius: 20px; padding: 30px; border: 1px solid var(--境界); text-align: center; cursor: pointer; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-        .card img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 20px; }
-
-        .btn-buy { background: var(--アクセント); color: #fff; padding: 12px 30px; border-radius: 980px; border: none; font-weight: 600; cursor: pointer; margin-top: 20px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .card { background: var(--白); border-radius: 20px; padding: 30px; border: 1px solid var(--境界); text-align: center; cursor: pointer; }
+        .card img { width: 100%; height: 160px; object-fit: contain; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -109,64 +99,53 @@
     <div class="nav-container">
         <div class="logo" onclick="showPage('top')">SMART HOME AI CONCIERGE</div>
         <nav class="nav-links">
-            <div class="nav-item"><a onclick="toggleMega('c_menu')">掃除機</a></div>
-            <div class="nav-item"><a onclick="toggleMega('l_menu')">照明</a></div>
-            <div class="nav-item"><a onclick="toggleMega('s_menu')">防犯</a></div>
+            <div class="nav-item"><a onclick="toggleMega('c_m')">掃除機</a></div>
+            <div class="nav-item"><a onclick="toggleMega('l_m')">照明</a></div>
+            <div class="nav-item"><a onclick="toggleMega('s_m')">防犯</a></div>
         </nav>
         <div class="menu-toggle" onclick="toggleMobile()"><span></span><span></span></div>
     </div>
 </header>
 
-<div id="c_menu" class="mega-menu">
-    <div class="menu-content">
-        <div class="menu-column"><span class="menu-label">閲覧</span><a onclick="showPage('cleaning_list')">すべてのモデル（10機種）</a></div>
-        <div class="menu-column"><span class="menu-label">比較</span><a onclick="showPage('cleaning_compare')">モデルを比較する</a></div>
-        <div class="menu-column"><span class="menu-label">注目</span><a onclick="showDetail('cleaning','r10')">Roomba 10 Max</a></div>
-    </div>
-</div>
-<div id="l_menu" class="mega-menu">
-    <div class="menu-content">
-        <div class="menu-column"><span class="menu-label">閲覧</span><a onclick="showPage('lighting_list')">すべてのモデル（7機種）</a></div>
-        <div class="menu-column"><span class="menu-label">比較</span><a onclick="showPage('lighting_compare')">モデルを比較する</a></div>
-        <div class="menu-column"><span class="menu-label">注目</span><a onclick="showDetail('lighting','huef')">Philips Hue</a></div>
-    </div>
-</div>
-<div id="s_menu" class="mega-menu">
-    <div class="menu-content">
-        <div class="menu-column"><span class="menu-label">閲覧</span><a onclick="showPage('security_list')">すべてのモデル（6機種）</a></div>
-        <div class="menu-column"><span class="menu-label">比較</span><a onclick="showPage('security_compare')">モデルを比較する</a></div>
-        <div class="menu-column"><span class="menu-label">注目</span><a onclick="showDetail('security','arlop')">Arlo Pro 5</a></div>
-    </div>
-</div>
+<div id="c_m" class="mega-menu"><div class="menu-content">
+    <div class="menu-column"><span class="menu-label">閲覧</span><a onclick="showPage('cleaning_list')">全10機種を見る</a></div>
+    <div class="menu-column"><span class="menu-label">比較</span><a onclick="showPage('cleaning_compare')">スペック比較</a></div>
+</div></div>
+<div id="l_m" class="mega-menu"><div class="menu-content">
+    <div class="menu-column"><span class="menu-label">閲覧</span><a onclick="showPage('lighting_list')">全7機種を見る</a></div>
+    <div class="menu-column"><span class="menu-label">比較</span><a onclick="showPage('lighting_compare')">スペック比較</a></div>
+</div></div>
+<div id="s_m" class="mega-menu"><div class="menu-content">
+    <div class="menu-column"><span class="menu-label">閲覧</span><a onclick="showPage('security_list')">全6機種を見る</a></div>
+    <div class="menu-column"><span class="menu-label">比較</span><a onclick="showPage('security_compare')">スペック比較</a></div>
+</div></div>
 
 <div class="mobile-nav" id="m_nav">
-    <a style="font-size:24px; margin-top:20px;" onclick="showPage('cleaning_list')">CLEANING</a>
-    <a style="font-size:24px; margin-top:20px;" onclick="showPage('lighting_list')">LIGHTING</a>
-    <a style="font-size:24px; margin-top:20px;" onclick="showPage('security_list')">SECURITY</a>
+    <a onclick="showPage('cleaning_list')">CLEANING</a>
+    <a onclick="showPage('lighting_list')">LIGHTING</a>
+    <a onclick="showPage('security_list')">SECURITY</a>
 </div>
 
 <main>
     <div id="top" class="page active">
         <section class="top-section"><h1>暮らしを、選ぶ。</h1><p>理想の知性を、あなたの家へ。</p></section>
-        <section class="top-section" style="background:#f5f5f7;" onclick="showPage('cleaning_list')"><span>CLEANING</span><h2>掃除を過去にする。</h2></section>
-        <section class="top-section" style="background:#000; color:#fff;" onclick="showPage('lighting_list')"><span>LIGHTING</span><h2>光を感情に。</h2></section>
-        <section class="top-section" style="background:#fff;" onclick="showPage('security_list')"><span>SECURITY</span><h2>安心をデザイン。</h2></section>
+        <section class="top-section" style="background:#f5f5f7;" onclick="showPage('cleaning_list')"><span>CLEANING</span><h2>掃除機 10 MODELS</h2></section>
+        <section class="top-section" style="background:#000; color:#fff;" onclick="showPage('lighting_list')"><span>LIGHTING</span><h2>照明 7 MODELS</h2></section>
+        <section class="top-section" style="background:#fff;" onclick="showPage('security_list')"><span>SECURITY</span><h2>防犯 6 MODELS</h2></section>
     </div>
 
-    <div id="listPage" class="page">
-        <div class="hero-section" style="text-align:center; padding:60px 0;"><h1 id="listT"></h1></div>
-        <div id="listG" class="product-grid"></div>
+    <div id="listP" class="page">
+        <div style="text-align:center; padding:60px 0;"><h1 id="lT"></h1></div>
+        <div id="lG" class="product-grid"></div>
     </div>
 
-    <div id="comparePage" class="page">
+    <div id="compareP" class="page">
         <div style="max-width:1100px; margin:0 auto; padding:40px 20px; display:flex; gap:20px;">
-            <select id="selL" onchange="renderComp()" style="flex:1; padding:15px; border-radius:10px;"></select>
-            <select id="selR" onchange="renderComp()" style="flex:1; padding:15px; border-radius:10px;"></select>
+            <select id="sL" onchange="renderC()" style="flex:1; padding:15px;"></select>
+            <select id="sR" onchange="renderC()" style="flex:1; padding:15px;"></select>
         </div>
-        <div id="compG" class="compare-grid"></div>
+        <div id="cG" class="compare-grid"></div>
     </div>
-
-    <div id="detailPage" class="page"><div id="detC"></div></div>
 </main>
 
 <script>
@@ -174,95 +153,94 @@ const db = {
     cleaning: {
         labels: ["吸引性能", "AI回避", "自動メンテ", "走破性", "静音性", "月額目安", "サイズ", "接続性", "稼働時間", "体験物語"],
         products: {
-            r10: { name: "Roomba 10 Max", price: "197,800", specs: ["8,000Pa", "物体学習回避", "全自動洗浄ドック", "20mm", "58dB", "800円", "35cm", "Matter", "180分", "掃除を完全に忘れる贅沢。"] },
-            s8: { name: "Roborock S8 MaxV", price: "188,000", specs: ["10,000Pa", "3Dストラクチャ", "Ultraドック", "20mm", "62dB", "900円", "35cm", "Matter", "180分", "壁際1mmまで磨き上げる知性。"] },
-            x10: { name: "Eufy X10 Pro", price: "99,990", specs: ["8,000Pa", "AI.See", "Omniドック", "19mm", "60dB", "500円", "35cm", "Wi-Fi", "120分", "最高峰の機能を民主化する。"] }
-            // ... 他全23機種分、内部データとして完全保持（文字数制限のため主要3台を例示、残りは同形式で展開）
+            r10: { name: "Roomba 10 Max", price: "197,800", specs: ["8,000Pa", "学習回避", "全自動", "20mm", "58dB", "800円", "35cm", "Matter", "180分", "掃除を忘れる。"] },
+            rj9: { name: "Roomba j9+", price: "129,800", specs: ["2倍吸引", "POOP回避", "自動収集", "20mm", "59dB", "600円", "34cm", "Wi-Fi", "120分", "信頼の品質。"] },
+            ri5: { name: "Roomba i5+", price: "79,800", specs: ["標準", "バンパー", "自動収集", "18mm", "62dB", "400円", "34cm", "Wi-Fi", "75分", "手軽な自動化。"] },
+            rs8: { name: "Roborock S8 MaxV", price: "188,000", specs: ["10,000Pa", "3D光", "Ultra", "20mm", "62dB", "900円", "35cm", "Matter", "180分", "究極の磨き上げ。"] },
+            rqr: { name: "Roborock Q Revo", price: "170,000", specs: ["18,500Pa", "AI回避", "全自動", "22mm", "63dB", "700円", "35cm", "Wi-Fi", "180分", "メンテ革命。"] },
+            ex1: { name: "Eufy X10 Pro", price: "99,990", specs: ["8,000Pa", "AI.See", "Omni", "19mm", "60dB", "500円", "35cm", "Wi-Fi", "120分", "コスパの頂点。"] },
+            es1: { name: "Eufy S1 Pro", price: "120,000", specs: ["8,000Pa", "3D LiDAR", "浄水", "20mm", "59dB", "600円", "35cm", "Wi-Fi", "150分", "常に清潔。"] },
+            dvs: { name: "Dyson Vis Nav", price: "189,200", specs: ["最強", "360°", "なし", "21mm", "65dB", "1000円", "33cm", "Wi-Fi", "50分", "ダイソンの真髄。"] },
+            prs: { name: "Panasonic RSF1000", price: "148,000", specs: ["高精度", "レーザー", "自動", "25mm", "56dB", "700円", "34cm", "Wi-Fi", "100分", "日本流の細やかさ。"] },
+            sk1: { name: "SwitchBot K10+", price: "59,800", specs: ["2,500Pa", "LiDAR", "小型", "15mm", "45dB", "300円", "25cm", "Wi-Fi", "120分", "日本の隙間に。"] }
         }
     },
     lighting: {
         labels: ["最大輝度", "演色性", "色彩", "安定性", "同期機能", "操作性", "設置", "寿命", "消費電力", "体験物語"],
         products: {
-            huef: { name: "Philips Hue Full", price: "16,800", specs: ["1,100lm", "Ra 90", "1,600万色", "Zigbee", "映像/音楽", "超高速", "E26/シーリング", "25,000h", "11W", "空間に感情を灯す。"] }
+            hwg: { name: "Hue ホワイトG", price: "12,000", specs: ["800lm", "Ra 90", "暖白〜冷白", "Zigbee", "不可", "高速", "E26", "25,000h", "9W", "日常を整える光。"] },
+            hfc: { name: "Hue フルカラー", price: "16,800", specs: ["1,100lm", "Ra 90", "1,600万色", "Zigbee", "可能", "高速", "E26", "25,000h", "11W", "色彩の芸術。"] },
+            hpb: { name: "Hue Playライトバー", price: "14,000", specs: ["530lm", "Ra 90", "1,600万色", "Zigbee", "最適", "高速", "置型", "25,000h", "6W", "画面と融合。"] },
+            nsh: { name: "Nanoleaf Shapes", price: "28,500", specs: ["100lm/枚", "Ra 80", "1,600万色", "Wi-Fi", "音楽連動", "タッチ", "壁貼", "25,000h", "2W/枚", "触れる光。"] },
+            nes: { name: "Nanoleaf Essentials", price: "3,500", specs: ["800lm", "Ra 90", "1,600万色", "Thread", "可能", "標準", "E26", "25,000h", "9W", "Matterの門。"] },
+            scl: { name: "SwitchBot シーリングP", price: "12,000", specs: ["5,499lm", "Ra 85", "暖白〜冷白", "Wi-Fi", "不可", "ハブ兼", "引掛", "40,000h", "40W", "家中を操る。"] },
+            itr: { name: "IKEA TRÅDFRI", price: "3,990", specs: ["806lm", "Ra 80", "暖白〜冷白", "Zigbee", "不可", "標準", "E26", "25,000h", "9W", "民主的スマート。"] }
         }
     },
     security: {
         labels: ["解像度", "視野角", "AI検知", "夜間視認", "電源", "保存先", "通話", "耐候性", "警告", "体験物語"],
         products: {
-            arlop: { name: "Arlo Pro 5", price: "34,800", specs: ["2K HDR", "160°", "人/車/荷物", "カラー夜間", "電池/有線", "Cloud/Local", "双方向", "IP65", "サイレン", "深夜の不安を確信に変える。"] }
+            ap5: { name: "Arlo Pro 5", price: "34,800", specs: ["2K HDR", "160°", "人車荷物", "カラー", "電池", "Cloud", "双方向", "IP65", "サイレン", "確実な証拠。"] },
+            au2: { name: "Arlo Ultra 2", price: "50,000", specs: ["4K HDR", "180°", "人車荷物", "カラー", "電池", "Local", "双方向", "IP65", "サイレン", "最強の視界。"] },
+            ngc: { name: "Google Nest Cam", price: "23,900", specs: ["1080p", "135°", "顔認識", "赤外線", "電池", "Cloud", "双方向", "IP54", "なし", "知的な眼差し。"] },
+            ngd: { name: "Google Nest Doorbell", price: "23,900", specs: ["960p", "145°", "顔認識", "赤外線", "電池", "Cloud", "双方向", "IP54", "自動応答", "玄関の対話。"] },
+            rbd: { name: "Ring Doorbell Plus", price: "24,980", specs: ["1536p", "150°", "荷物検知", "カラー", "電池", "Cloud", "双方向", "耐候", "サイレン", "足元まで。"] },
+            es3: { name: "Eufy SoloCam S340", price: "24,900", specs: ["3K", "360°", "追尾", "カラー", "ソーラー", "Local", "双方向", "IP65", "サイレン", "無限の安心。"] }
         }
     }
 };
 
-let curCat = 'cleaning';
-
 function toggleMega(id) {
-    const m = document.getElementById(id);
-    const isOpen = m.style.display === 'block';
-    document.querySelectorAll('.mega-menu').forEach(x => x.style.display = 'none');
-    m.style.display = isOpen ? 'none' : 'block';
+    const el = document.getElementById(id);
+    const show = el.style.display === 'block';
+    document.querySelectorAll('.mega-menu').forEach(m => m.style.display = 'none');
+    el.style.display = show ? 'none' : 'block';
 }
 
-function toggleMobile() {
-    document.getElementById('m_nav').classList.toggle('active');
-}
+function toggleMobile() { document.getElementById('m_nav').classList.toggle('active'); }
 
 function showPage(p) {
     document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.mega-menu').forEach(x => x.style.display = 'none');
+    document.querySelectorAll('.mega-menu').forEach(m => m.style.display = 'none');
     document.getElementById('m_nav').classList.remove('active');
-
     if(p === 'top') document.getElementById('top').classList.add('active');
     else {
-        const [cat, mode] = p.split('_'); curCat = cat;
-        if(mode === 'list') {
-            document.getElementById('listT').innerText = db[cat].labels[9];
+        const [c, m] = p.split('_'); 
+        if(m === 'list') {
+            document.getElementById('lT').innerText = db[c].labels[9];
             let h = '';
-            for(let k in db[cat].products) {
-                const x = db[cat].products[k];
-                h += `<div class="card" onclick="showDetail('${cat}','${k}')">
+            for(let k in db[c].products) {
+                const x = db[c].products[k];
+                h += `<div class="card" onclick="alert('${x.name}: ${x.specs[9]}')">
                     <img src="https://via.placeholder.com/400x250/f5f5f7/1d1d1f?text=${x.name}">
                     <h3>${x.name}</h3><p>${x.price}円〜</p></div>`;
             }
-            document.getElementById('listG').innerHTML = h;
-            document.getElementById('listPage').classList.add('active');
+            document.getElementById('lG').innerHTML = h; document.getElementById('listP').classList.add('active');
         } else {
-            const keys = Object.keys(db[cat].products);
-            document.getElementById('selL').innerHTML = document.getElementById('selR').innerHTML = keys.map(k=>`<option value="${k}">${db[cat].products[k].name}</option>`).join('');
-            document.getElementById('selR').selectedIndex = 1; renderComp();
-            document.getElementById('comparePage').classList.add('active');
+            const ks = Object.keys(db[c].products);
+            document.getElementById('sL').innerHTML = document.getElementById('sR').innerHTML = ks.map(k=>`<option value="${k}">${db[c].products[k].name}</option>`).join('');
+            document.getElementById('sR').selectedIndex = 1; curC = c; renderC();
+            document.getElementById('compareP').classList.add('active');
         }
     }
-    window.scrollTo(0,0);
 }
 
-function renderComp() {
-    const kL = document.getElementById('selL').value, kR = document.getElementById('selR').value;
-    const pL = db[curCat].products[kL], pR = db[curCat].products[kR];
+let curC = 'cleaning';
+function renderC() {
+    const kL = document.getElementById('sL').value, kR = document.getElementById('sR').value;
+    const pL = db[curC].products[kL], pR = db[curC].products[kR];
     let h = '';
-    db[curCat].labels.forEach((l, i) => {
-        h += `<div class="comp-head"><span class="comp-label">${l}</span></div>
+    db[curC].labels.forEach((l, i) => {
+        h += `<div class="comp-cell"><span class="comp-label">${l}</span></div>
               <div class="comp-cell"><span class="comp-val">${pL.specs[i]}</span></div>
               <div class="comp-cell"><span class="comp-val">${pR.specs[i]}</span></div>`;
     });
-    document.getElementById('compG').innerHTML = h;
+    document.getElementById('cG').innerHTML = h;
 }
-
-function showDetail(cat, k) {
-    const x = db[cat].products[k];
-    document.getElementById('detC').innerHTML = `
-        <div style="text-align:center; padding:100px 20px;">
-            <h1>${x.name}</h1><p style="font-size:24px; color:var(--文字-副); margin:20px 0;">${x.specs[9]}</p>
-            <button class="btn-buy">今すぐ購入 - ${x.price}円</button>
-        </div>`;
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('detailPage').classList.add('active');
-}
-
-window.onscroll = () => { document.getElementById('bgGrid').style.transform = `translateY(${window.pageYOffset * 0.1}px)`; };
 </script>
 </body>
 </html>
+
 
 
 
