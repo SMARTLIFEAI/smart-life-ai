@@ -2,129 +2,126 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>SMART LIFE AI | 効率化の頂点へ</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART LIFE AI | 未来を、日常に。</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --bg-color: #f2f2f7; --card-bg: #ffffff; --accent-blue: #007aff; --text-main: #1c1c1e; --text-sub: #8e8e93; --border: #e5e5ea; }
-        body { font-family: "Inter", "Hiragino Sans", sans-serif; margin: 0; background: var(--bg-color); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
-        header { background: #fff; padding: 10px 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 900; box-shadow: 0 1px 10px rgba(0,0,0,0.05); gap: 10px; }
-        .logo { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; flex: 1; cursor: pointer; text-decoration: none; color: #000; }
-        .search-bar { width: 100%; border: none; background: var(--bg-color); padding: 8px 12px; border-radius: 10px; font-size: 14px; outline: none; }
-        .hero { padding: 60px 20px; text-align: center; background: #fff; }
-        .hero h1 { font-size: 28px; font-weight: 900; margin-bottom: 15px; }
-        .compare-grid { display: flex; gap: 20px; padding: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
-        .compare-grid::-webkit-scrollbar { display: none; }
-        .card { width: 280px; min-width: 280px; background: #fff; border-radius: 20px; scroll-snap-align: start; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .card-img { width: 100%; height: 200px; object-fit: contain; padding: 20px; box-sizing: border-box; }
-        .card-body { padding: 20px; }
-        .card-title { font-size: 18px; font-weight: 800; margin: 0 0 5px; }
-        .card-price { font-size: 16px; font-weight: 700; color: var(--accent-blue); margin-bottom: 15px; }
-        .btn-buy { display: block; background: #000; color: #fff; text-align: center; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 700; transition: 0.3s; }
-        .btn-buy:hover { background: #333; }
-        .blog-section { padding: 20px; max-width: 800px; margin: 0 auto; }
-        .blog-card { background: #fff; border-radius: 20px; padding: 25px; margin-bottom: 20px; border-left: 6px solid #000; }
-        .chat-container { padding: 40px 20px; max-width: 600px; margin: 0 auto; }
-        .chat-box { background: #fff; border-radius: 24px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
-        #chat-messages { height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .bubble { padding: 10px 15px; border-radius: 15px; font-size: 14px; max-width: 80%; }
-        .bot { background: var(--bg-color); align-self: flex-start; }
-        .user { background: var(--accent-blue); color: #fff; align-self: flex-end; }
-        footer { padding: 40px; text-align: center; color: var(--text-sub); font-size: 12px; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: #ffffff; color: #1d1d1f; }
+        .apple-blur { background: rgba(255, 255, 255, 0.8); backdrop-filter: saturate(180%) blur(20px); }
+        .spec-label { color: #86868b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .hero-gradient { background: linear-gradient(180deg, #ffffff 0%, #f5f5f7 100%); }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-<header>
-    <a href="index.html" class="logo">SMART LIFE AI</a>
-    <div style="flex:2;"><input type="text" class="search-bar" placeholder="未来の道具を探す..."></div>
-</header>
-
-<section class="hero">
-    <h1>その「家事」は、AIに譲れる。</h1>
-    <p>最終更新: 2026-02-23 03:31 
- その「家事」は、もっと自由になれるはずです。</p>
-</section>
-
-<div style="padding: 20px 20px 0; font-weight: 800;">厳選：今すぐ導入すべき3選</div>
-<div class="compare-grid" id="product-list"></div>
-
-<div class="blog-section">
-    <div style="font-weight: 800; margin-bottom: 15px;">ライフスタイル・ハック</div>
-    <article class="blog-card">
-        <div style="font-size: 12px; color: var(--text-sub);">FEATURED ARTICLE</div>
-        <h2 style="font-size: 20px;">「名もなき家事」を抹殺する。<br>2026年版・自動化のロードマップ</h2>
-        <p style="font-size: 14px; color: #444;">洗剤の補充、鍵の開け閉め、床の拭き掃除。これらはすべて、あなたがやる必要のない仕事です。</p>
-        <a href="article1.html" style="color:#000; font-weight:800; text-decoration:none; border-bottom: 2px solid #000;">メソッドを詳しく見る →</a>
-    </article>
-</div>
-
-<section class="chat-container">
-    <div class="chat-box">
-        <div id="chat-messages">
-            <div class="bubble bot">🤖 どんな「面倒」を解決したいですか？予算に合わせて提案します。</div>
+    <nav class="fixed top-0 w-full z-50 apple-blur border-b border-gray-100">
+        <div class="max-w-screen-xl mx-auto px-6 h-12 flex items-center justify-between">
+            <div class="font-bold tracking-tighter text-xl italic">SMART LIFE AI</div>
+            <div class="flex space-x-8 text-xs font-medium text-gray-600">
+                <a href="#" class="hover:text-black transition">ホーム</a>
+                <a href="#compare" class="hover:text-black transition">比較</a>
+                <a href="#trend" class="hover:text-black transition">トレンド</a>
+                <a href="article1.html" class="hover:text-black transition">コラム</a>
+            </div>
         </div>
-        <div style="display:flex; gap:10px; margin-top:15px;">
-            <input type="text" id="chat-input" style="flex:1; border:none; background:#eee; padding:10px; border-radius:20px; outline:none;" placeholder="例：掃除を楽にしたい">
-            <button onclick="sendMessage()" style="background:var(--accent-blue); color:#fff; border:none; padding:10px 20px; border-radius:20px; cursor:pointer;">送信</button>
+    </nav>
+
+    <header class="hero-gradient pt-32 pb-20 text-center px-4">
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">その「家事」は、AIに譲れる。</h1>
+        <p class="text-xl md:text-2xl text-gray-500 font-light mb-4">もっと自由に。もっとスマートに。</p>
+        <div class="inline-block px-4 py-1 rounded-full bg-gray-100 text-gray-500 text-sm font-medium border border-gray-200">
+             AI自律更新済み: 2026-02-23
+        </div>
+    </header>
+
+    <section id="trend" class="max-w-5xl mx-auto px-6 py-24">
+        <div class="flex items-end justify-between mb-12">
+            <div>
+                <h2 class="text-3xl font-bold tracking-tight">AIが選ぶ最新トレンド</h2>
+                <p class="text-gray-400 mt-2">Gemini AIが世界中のデータを解析し、自動で更新しています。</p>
+            </div>
+        </div>
+        
+        <ul id="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <li class="p-8 rounded-3xl bg-gray-50 border border-gray-100 text-center italic text-gray-400">
+                AIが自動更新中！
+            </li>
+        </ul>
+    </section>
+
+    <section id="compare" class="bg-white py-24 border-t border-gray-100">
+        <div class="max-w-5xl mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-20 tracking-tight">最適な一台を、見つける。</h2>
+            
+            <div class="grid grid-cols-3 gap-x-8 gap-y-16">
+                <div class="text-center">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80" class="w-full aspect-square object-cover rounded-2xl mb-8 shadow-sm grayscale hover:grayscale-0 transition duration-700" alt="Roborock">
+                    <h3 class="text-2xl font-bold">Roborock S8</h3>
+                    <p class="text-sm text-gray-500 mt-2 mb-8">究極の自動化</p>
+                    
+                    <div class="space-y-12 py-12 border-t border-gray-100 text-center">
+                        <div><p class="text-2xl font-bold">10,000Pa</p><p class="spec-label">業界最高峰の吸引力</p></div>
+                        <div><p class="text-2xl font-bold">全自動</p><p class="spec-label">ゴミ収集・モップ洗浄</p></div>
+                        <div><p class="text-2xl font-bold">LiDAR 4.0</p><p class="spec-label">高精度マッピング</p></div>
+                    </div>
+                    <a href="#" class="inline-block mt-4 px-6 py-2 bg-black text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">詳細を見る</a>
+                </div>
+
+                <div class="text-center border-x border-gray-50 px-4">
+                    <img src="https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=400&q=80" class="w-full aspect-square object-cover rounded-2xl mb-8 shadow-sm grayscale hover:grayscale-0 transition duration-700" alt="SwitchBot">
+                    <h3 class="text-2xl font-bold">SwitchBot Lock</h3>
+                    <p class="text-sm text-gray-500 mt-2 mb-8">鍵からの解放</p>
+
+                    <div class="space-y-12 py-12 border-t border-gray-100 text-center">
+                        <div><p class="text-2xl font-bold">指紋認証</p><p class="spec-label">0.3秒で解錠</p></div>
+                        <div><p class="text-2xl font-bold">9ヶ月</p><p class="spec-label">驚異のバッテリー持ち</p></div>
+                        <div><p class="text-2xl font-bold">Matter</p><p class="spec-label">最新スマートホーム対応</p></div>
+                    </div>
+                    <a href="#" class="inline-block mt-4 px-6 py-2 bg-black text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">詳細を見る</a>
+                </div>
+
+                <div class="text-center">
+                    <img src="https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?auto=format&fit=crop&w=400&q=80" class="w-full aspect-square object-cover rounded-2xl mb-8 shadow-sm grayscale hover:grayscale-0 transition duration-700" alt="T-fal">
+                    <h3 class="text-2xl font-bold">Cook4me Touch</h3>
+                    <p class="text-sm text-gray-500 mt-2 mb-8">プロの味をボタン一つで</p>
+
+                    <div class="space-y-12 py-12 border-t border-gray-100 text-center">
+                        <div><p class="text-2xl font-bold">250+</p><p class="spec-label">内蔵AIレシピ</p></div>
+                        <div><p class="text-2xl font-bold">高速</p><p class="spec-label">加圧時間 大幅短縮</p></div>
+                        <div><p class="text-2xl font-bold">Wi-Fi</p><p class="spec-label">スマホ連携・追加レシピ</p></div>
+                    </div>
+                    <a href="#" class="inline-block mt-4 px-6 py-2 bg-black text-white rounded-full text-sm font-bold hover:bg-gray-800 transition">詳細を見る</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto px-6 py-24">
+        <div class="bg-gray-50 rounded-[2.5rem] p-12 flex flex-col md:flex-row items-center justify-between shadow-sm">
+            <div class="md:w-2/3">
+                <p class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-widest">Featured Article</p>
+                <h3 class="text-3xl font-bold mb-4 leading-tight">「名もなき家事」を抹殺する。<br>2026年版・自動化のロードマップ</h3>
+                <p class="text-gray-500 mb-6 font-light">洗剤の補充、鍵の開け閉め、床の拭き掃除。これらはすべて、あなたがやる必要のない仕事です。</p>
+                <a href="article1.html" class="text-black font-bold border-b-2 border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition">メソッドを詳しく見る →</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="fixed bottom-10 right-10 z-50">
+        <div class="group relative">
+            <div class="absolute -inset-1 bg-gradient-to-r from-gray-400 to-black rounded-full blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+            <button class="relative bg-black text-white px-8 py-5 rounded-full shadow-2xl flex items-center space-x-4 hover:scale-105 active:scale-95 transition transform duration-300">
+                <span class="text-lg font-bold tracking-tight">AI家事コンシェルジュに相談</span>
+                <span class="flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+            </button>
         </div>
     </div>
-</section>
 
-<footer>&copy; 2026 SMART LIFE AI. All Rights Reserved.</footer>
-
-<script>
-    const products = [
-        {
-            tag: "Cleaning",
-            title: "Roborock S8 MaxV Ultra",
-            price: "¥228,000",
-            img: "https://m.media-amazon.com/images/I/61NfXpY9p2L._AC_SL1500_.jpg",
-            link: "https://www.amazon.co.jp/s?k=Roborock+S8+MaxV+Ultra"
-        },
-        {
-            tag: "Security",
-            title: "SwitchBot Lock Pro",
-            price: "¥15,980",
-            img: "https://m.media-amazon.com/images/I/51-vS2D6h1L._AC_SL1200_.jpg",
-            link: "https://www.amazon.co.jp/s?k=SwitchBot+Lock+Pro"
-        },
-        {
-            tag: "Kitchen",
-            title: "T-fal Cook4me Touch",
-            price: "¥45,000",
-            img: "https://m.media-amazon.com/images/I/61S-r5pBshL._AC_SL1500_.jpg",
-            link: "https://www.amazon.co.jp/s?k=T-fal+Cook4me+Touch"
-        }
-    ];
-
-    const list = document.getElementById('product-list');
-    products.forEach(p => {
-        list.innerHTML += `<div class="card">
-            <img src="${p.img}" class="card-img">
-            <div class="card-body">
-                <div style="font-size:10px; color:var(--accent-blue); font-weight:bold;">${p.tag}</div>
-                <div class="card-title">${p.title}</div>
-                <div class="card-price">${p.price}</div>
-                <a href="${p.link}" target="_blank" class="btn-buy">詳細をチェック</a>
-            </div>
-        </div>`;
-    });
-
-    function sendMessage() {
-        const input = document.getElementById("chat-input");
-        const msg = document.getElementById("chat-messages");
-        if (!input.value) return;
-        msg.innerHTML += `<div class="bubble user">${input.value}</div>`;
-        const val = input.value;
-        input.value = "";
-        setTimeout(() => {
-            let res = "そのお悩みなら、まずはRoborockの導入をおすすめします。";
-            if(val.includes("キッチン")) res = "料理の自動化ならCook4meが最強です。";
-            msg.innerHTML += `<div class="bubble bot">🤖 ${res}</div>`;
-            msg.scrollTop = msg.scrollHeight;
-        }, 800);
-    }
-</script>
 </body>
 </html>
+
 
