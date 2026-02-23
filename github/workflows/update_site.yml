@@ -1,0 +1,35 @@
+name: AI Auto Content Update
+
+on:
+  workflow_dispatch: # 手動で「更新ボタン」を押した時に実行
+  schedule:
+    - cron: '0 0 * * 1' # 毎週月曜日に自動実行
+
+jobs:
+  update-content:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: AI Content Generation
+        uses: google-gemini/generate-content-action@v1 # Gemini APIを使用する例
+        with:
+          api-key: ${{ secrets.GEMINI_API_KEY }}
+          prompt: |
+            あなたは「SMART LIFE AI」の専属編集長です。
+            現在の index.html を読み込み、以下の更新を行ってください。
+            
+            1. 「id="top-10-list"」の中身を、2026年最新のAmazon高評価ガジェット10個で上書きせよ。
+            2. 各製品には「Amazonの正しい個別URL」「製品画像URL」「吸引力や機能等の2つのスペック」を含めること。
+            3. 【最重要指示】既存のメニューバー、クイックバナー、デザイン、スクリプト、フッターは1ミリも削るな。
+            4. 出力は「HTMLコード全体」のみを返せ。
+          files: index.html
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "AI-Editor"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "AIによる最新ガジェット情報の自動更新"
+          git push
