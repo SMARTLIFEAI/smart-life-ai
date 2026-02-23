@@ -14,6 +14,7 @@
             --境界: #d2d2d7;
             --背景-淡: #f5f5f7;
             --透過-白: rgba(255, 255, 255, 0.88);
+            --Apple-Ease: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,7 +28,7 @@
         .parallax-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .grid-layer { position: absolute; width: 100%; height: 200%; background-image: linear-gradient(var(--背景-淡) 1px, transparent 1px), linear-gradient(90deg, var(--背景-淡) 1px, transparent 1px); background-size: 80px 80px; opacity: 0.4; }
 
-        /* --- ヘッダー --- */
+        /* --- ヘッダー（Apple流） --- */
         header {
             position: fixed; top: 0; width: 100%; z-index: 10000;
             background: var(--透過-白); backdrop-filter: saturate(180%) blur(20px);
@@ -37,58 +38,67 @@
             max-width: 1024px; margin: 0 auto; display: flex;
             align-items: center; padding: 0 22px; height: 100%; position: relative;
         }
-        .logo { font-weight: 600; font-size: 14px; cursor: pointer; z-index: 10002; }
+        .logo { font-weight: 600; font-size: 14px; cursor: pointer; z-index: 10005; }
         
         .nav-links { 
             display: flex; gap: 40px; height: 100%;
             position: absolute; left: 50%; transform: translateX(-50%);
         }
+        @media (max-width: 768px) { .nav-links { display: none; } }
         .nav-item { display: flex; align-items: center; }
-        .nav-item > a { font-size: 12px; font-weight: 400; color: var(--文字-主); text-decoration: none; opacity: 0.8; cursor: pointer; }
+        .nav-item > a { font-size: 12px; font-weight: 400; color: var(--文字-主); text-decoration: none; opacity: 0.8; cursor: pointer; transition: 0.2s; }
+        .nav-item > a:hover { opacity: 1; color: var(--アクセント); }
 
-        /* メガメニュー */
+        /* メガメニュー（横書き、全商品名羅列） */
         .mega-menu {
             position: fixed; top: 44px; left: 0; width: 100%; background: var(--白);
-            border-bottom: 1px solid var(--境界); display: none; padding: 50px 0; 
-            z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-bottom: 1px solid var(--境界); opacity: 0; visibility: hidden;
+            transform: translateY(-10px); transition: 0.4s var(--Apple-Ease);
+            z-index: 9999; padding: 40px 0; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
+        .mega-menu.active { opacity: 1; visibility: visible; transform: translateY(0); }
         .menu-content { 
             max-width: 1024px; margin: 0 auto; padding: 0 40px;
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;
         }
-        .menu-column { display: flex; flex-direction: column; gap: 15px; }
-        .menu-label { font-size: 11px; color: var(--文字-副); font-weight: 600; }
-        .menu-column a { font-size: 14px; font-weight: 600; color: var(--文字-主); text-decoration: none; cursor: pointer; }
+        .menu-column { display: flex; flex-direction: column; gap: 10px; }
+        .menu-label { font-size: 11px; color: var(--文字-副); font-weight: 600; margin-bottom: 5px; border-bottom: 1px solid var(--背景-淡); padding-bottom: 5px; }
+        .menu-column a { font-size: 13px; font-weight: 400; color: var(--文字-主); text-decoration: none; cursor: pointer; line-height: 1.4; }
+        .menu-column a:hover { color: var(--アクセント); }
 
-        /* 三本線（独立） */
-        .menu-toggle { margin-left: auto; z-index: 10002; cursor: pointer; display: flex; flex-direction: column; gap: 4px; padding: 10px; }
-        .menu-toggle span { width: 18px; height: 1px; background: var(--文字-主); transition: 0.3s; }
-        .mobile-nav { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 0; background: var(--白); 
-            z-index: 10001; overflow: hidden; transition: 0.5s ease; display: flex; flex-direction: column; padding: 0 40px;
+        /* 三本線（×ボタン対応・Apple流アニメ） */
+        .menu-toggle { margin-left: auto; z-index: 10005; cursor: pointer; width: 18px; height: 18px; position: relative; }
+        .menu-toggle span { 
+            display: block; position: absolute; width: 100%; height: 1px; 
+            background: var(--文字-主); transition: 0.3s var(--Apple-Ease); 
         }
-        .mobile-nav.active { height: 100vh; padding-top: 80px; }
+        .menu-toggle span:nth-child(1) { top: 6px; }
+        .menu-toggle span:nth-child(2) { bottom: 6px; }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg); top: 9px; }
+        .menu-toggle.active span:nth-child(2) { transform: rotate(-45deg); bottom: 8px; }
+
+        .mobile-nav { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--白); 
+            z-index: 10001; opacity: 0; visibility: hidden; transition: 0.4s var(--Apple-Ease);
+            display: flex; flex-direction: column; padding: 80px 40px; gap: 25px;
+        }
+        .mobile-nav.active { opacity: 1; visibility: visible; }
+        .mobile-nav a { font-size: 28px; font-weight: 600; text-decoration: none; color: var(--文字-主); border-bottom: 1px solid var(--背景-淡); padding-bottom: 10px; }
 
         /* --- ページ構成 --- */
         .page { display: none; padding-top: 44px; min-height: 100vh; animation: fadeIn 0.8s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* TOP 3段 */
-        .top-section { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; }
-        
-        /* 比較グリッド */
-        .compare-grid { 
-            display: grid; grid-template-columns: 220px 1fr 1fr; gap: 1px; background: var(--境界); 
-            max-width: 1100px; margin: 20px auto; border: 1px solid var(--境界);
-        }
-        .comp-cell { background: var(--白); padding: 25px 20px; display: flex; flex-direction: column; justify-content: center; }
-        .comp-label { font-size: 10px; font-weight: 700; color: var(--アクセント); letter-spacing: 0.1em; text-transform: uppercase; }
-        .comp-val { font-size: 16px; font-weight: 600; margin-top: 5px; }
+        .top-section { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; transition: 0.5s; }
+        .compare-grid { display: grid; grid-template-columns: 200px 1fr 1fr; gap: 1px; background: var(--境界); max-width: 1000px; margin: 20px auto; border: 1px solid var(--境界); }
+        .comp-cell { background: var(--白); padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+        .comp-label { font-size: 10px; font-weight: 700; color: var(--アクセント); letter-spacing: 0.1em; }
+        .comp-val { font-size: 15px; font-weight: 600; margin-top: 5px; }
 
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1100px; margin: 40px auto; padding: 0 20px; }
-        .card { background: var(--白); border-radius: 20px; padding: 30px; border: 1px solid var(--境界); text-align: center; cursor: pointer; }
-        .card img { width: 100%; height: 160px; object-fit: contain; margin-bottom: 20px; }
+        .card { background: var(--白); border-radius: 20px; padding: 30px; border: 1px solid var(--境界); text-align: center; cursor: pointer; transition: 0.3s var(--Apple-Ease); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
     </style>
 </head>
 <body>
@@ -103,35 +113,46 @@
             <div class="nav-item"><a onclick="toggleMega('l_m')">照明</a></div>
             <div class="nav-item"><a onclick="toggleMega('s_m')">防犯</a></div>
         </nav>
-        <div class="menu-toggle" onclick="toggleMobile()"><span></span><span></span></div>
+        <div class="menu-toggle" id="togg" onclick="toggleMobile()"><span></span><span></span></div>
     </div>
 </header>
 
 <div id="c_m" class="mega-menu"><div class="menu-content">
-    <div class="menu-column"><span class="menu-label">閲覧</span><a onclick="showPage('cleaning_list')">全10機種を見る</a></div>
-    <div class="menu-column"><span class="menu-label">比較</span><a onclick="showPage('cleaning_compare')">スペック比較</a></div>
+    <div class="menu-column"><span class="menu-label">モデル</span><a onclick="showDetail('cleaning','r10')">Roomba 10 Max</a><a onclick="showDetail('cleaning','rj9')">Roomba j9+</a><a onclick="showDetail('cleaning','ri5')">Roomba i5+</a></div>
+    <div class="menu-column"><span class="menu-label">ハイエンド</span><a onclick="showDetail('cleaning','rs8')">Roborock S8 MaxV</a><a onclick="showDetail('cleaning','rqr')">Roborock Q Revo</a><a onclick="showDetail('cleaning','ex1')">Eufy X10 Pro</a></div>
+    <div class="menu-column"><span class="menu-label">独自機能</span><a onclick="showDetail('cleaning','es1')">Eufy S1 Pro</a><a onclick="showDetail('cleaning','dvs')">Dyson Vis Nav</a><a onclick="showDetail('cleaning','prs')">Panasonic RSF</a></div>
+    <div class="menu-column"><span class="menu-label">比較 & 閲覧</span><a onclick="showPage('cleaning_compare')" style="color:var(--アクセント)">スペックを比較</a><a onclick="showPage('cleaning_list')">すべて表示</a></div>
 </div></div>
+
 <div id="l_m" class="mega-menu"><div class="menu-content">
-    <div class="menu-column"><span class="menu-label">閲覧</span><a onclick="showPage('lighting_list')">全7機種を見る</a></div>
-    <div class="menu-column"><span class="menu-label">比較</span><a onclick="showPage('lighting_compare')">スペック比較</a></div>
+    <div class="menu-column"><span class="menu-label">Philips Hue</span><a onclick="showDetail('lighting','hwg')">ホワイトグラデーション</a><a onclick="showDetail('lighting','hfc')">フルカラー</a><a onclick="showDetail('lighting','hpb')">Playライトバー</a></div>
+    <div class="menu-column"><span class="menu-label">Nanoleaf</span><a onclick="showDetail('lighting','nsh')">Shapes</a><a onclick="showDetail('lighting','nes')">Essentials</a></div>
+    <div class="menu-column"><span class="menu-label">その他</span><a onclick="showDetail('lighting','scl')">SwitchBot シーリングP</a><a onclick="showDetail('lighting','itr')">IKEA TRÅDFRI</a></div>
+    <div class="menu-column"><span class="menu-label">比較 & 閲覧</span><a onclick="showPage('lighting_compare')" style="color:var(--アクセント)">スペックを比較</a><a onclick="showPage('lighting_list')">すべて表示</a></div>
 </div></div>
+
 <div id="s_m" class="mega-menu"><div class="menu-content">
-    <div class="menu-column"><span class="menu-label">閲覧</span><a onclick="showPage('security_list')">全6機種を見る</a></div>
-    <div class="menu-column"><span class="menu-label">比較</span><a onclick="showPage('security_compare')">スペック比較</a></div>
+    <div class="menu-column"><span class="menu-label">Arlo</span><a onclick="showDetail('security','ap5')">Pro 5</a><a onclick="showDetail('security','au2')">Ultra 2</a></div>
+    <div class="menu-column"><span class="menu-label">Google Nest</span><a onclick="showDetail('security','ngc')">Nest Cam</a><a onclick="showDetail('security','ngd')">Nest Doorbell</a></div>
+    <div class="menu-column"><span class="menu-label">その他</span><a onclick="showDetail('security','rbd')">Ring Doorbell Plus</a><a onclick="showDetail('security','es3')">Eufy SoloCam S340</a></div>
+    <div class="menu-column"><span class="menu-label">比較 & 閲覧</span><a onclick="showPage('security_compare')" style="color:var(--アクセント)">スペックを比較</a><a onclick="showPage('security_list')">すべて表示</a></div>
 </div></div>
 
 <div class="mobile-nav" id="m_nav">
-    <a onclick="showPage('cleaning_list')">CLEANING</a>
-    <a onclick="showPage('lighting_list')">LIGHTING</a>
-    <a onclick="showPage('security_list')">SECURITY</a>
+    <a onclick="showPage('cleaning_list')">掃除機 一覧</a>
+    <a onclick="showPage('cleaning_compare')" style="font-size:18px; color:var(--アクセント)">- 掃除機を比較する</a>
+    <a onclick="showPage('lighting_list')">照明 一覧</a>
+    <a onclick="showPage('lighting_compare')" style="font-size:18px; color:var(--アクセント)">- 照明を比較する</a>
+    <a onclick="showPage('security_list')">防犯 一覧</a>
+    <a onclick="showPage('security_compare')" style="font-size:18px; color:var(--アクセント)">- 防犯を比較する</a>
 </div>
 
 <main>
     <div id="top" class="page active">
         <section class="top-section"><h1>暮らしを、選ぶ。</h1><p>理想の知性を、あなたの家へ。</p></section>
-        <section class="top-section" style="background:#f5f5f7;" onclick="showPage('cleaning_list')"><span>CLEANING</span><h2>掃除機 10 MODELS</h2></section>
-        <section class="top-section" style="background:#000; color:#fff;" onclick="showPage('lighting_list')"><span>LIGHTING</span><h2>照明 7 MODELS</h2></section>
-        <section class="top-section" style="background:#fff;" onclick="showPage('security_list')"><span>SECURITY</span><h2>防犯 6 MODELS</h2></section>
+        <section class="top-section" style="background:#f5f5f7;" onclick="showPage('cleaning_list')"><span>CLEANING</span><h2>掃除機 10機種</h2></section>
+        <section class="top-section" style="background:#000; color:#fff;" onclick="showPage('lighting_list')"><span>LIGHTING</span><h2>照明 7機種</h2></section>
+        <section class="top-section" style="background:#fff;" onclick="showPage('security_list')"><span>SECURITY</span><h2>防犯 6機種</h2></section>
     </div>
 
     <div id="listP" class="page">
@@ -140,12 +161,14 @@
     </div>
 
     <div id="compareP" class="page">
-        <div style="max-width:1100px; margin:0 auto; padding:40px 20px; display:flex; gap:20px;">
-            <select id="sL" onchange="renderC()" style="flex:1; padding:15px;"></select>
-            <select id="sR" onchange="renderC()" style="flex:1; padding:15px;"></select>
+        <div style="max-width:1000px; margin:0 auto; padding:40px 20px; display:flex; gap:20px;">
+            <select id="sL" onchange="renderC()" style="flex:1; padding:15px; border-radius:10px;"></select>
+            <select id="sR" onchange="renderC()" style="flex:1; padding:15px; border-radius:10px;"></select>
         </div>
         <div id="cG" class="compare-grid"></div>
     </div>
+
+    <div id="detP" class="page"><div id="detC"></div></div>
 </main>
 
 <script>
@@ -161,7 +184,7 @@ const db = {
             ex1: { name: "Eufy X10 Pro", price: "99,990", specs: ["8,000Pa", "AI.See", "Omni", "19mm", "60dB", "500円", "35cm", "Wi-Fi", "120分", "コスパの頂点。"] },
             es1: { name: "Eufy S1 Pro", price: "120,000", specs: ["8,000Pa", "3D LiDAR", "浄水", "20mm", "59dB", "600円", "35cm", "Wi-Fi", "150分", "常に清潔。"] },
             dvs: { name: "Dyson Vis Nav", price: "189,200", specs: ["最強", "360°", "なし", "21mm", "65dB", "1000円", "33cm", "Wi-Fi", "50分", "ダイソンの真髄。"] },
-            prs: { name: "Panasonic RSF1000", price: "148,000", specs: ["高精度", "レーザー", "自動", "25mm", "56dB", "700円", "34cm", "Wi-Fi", "100分", "日本流の細やかさ。"] },
+            prs: { name: "Panasonic RSF", price: "148,000", specs: ["高精度", "レーザー", "自動", "25mm", "56dB", "700円", "34cm", "Wi-Fi", "100分", "日本流の細やかさ。"] },
             sk1: { name: "SwitchBot K10+", price: "59,800", specs: ["2,500Pa", "LiDAR", "小型", "15mm", "45dB", "300円", "25cm", "Wi-Fi", "120分", "日本の隙間に。"] }
         }
     },
@@ -170,9 +193,9 @@ const db = {
         products: {
             hwg: { name: "Hue ホワイトG", price: "12,000", specs: ["800lm", "Ra 90", "暖白〜冷白", "Zigbee", "不可", "高速", "E26", "25,000h", "9W", "日常を整える光。"] },
             hfc: { name: "Hue フルカラー", price: "16,800", specs: ["1,100lm", "Ra 90", "1,600万色", "Zigbee", "可能", "高速", "E26", "25,000h", "11W", "色彩の芸術。"] },
-            hpb: { name: "Hue Playライトバー", price: "14,000", specs: ["530lm", "Ra 90", "1,600万色", "Zigbee", "最適", "高速", "置型", "25,000h", "6W", "画面と融合。"] },
+            hpb: { name: "Hue Playバー", price: "14,000", specs: ["530lm", "Ra 90", "1,600万色", "Zigbee", "最適", "高速", "置型", "25,000h", "6W", "画面と融合。"] },
             nsh: { name: "Nanoleaf Shapes", price: "28,500", specs: ["100lm/枚", "Ra 80", "1,600万色", "Wi-Fi", "音楽連動", "タッチ", "壁貼", "25,000h", "2W/枚", "触れる光。"] },
-            nes: { name: "Nanoleaf Essentials", price: "3,500", specs: ["800lm", "Ra 90", "1,600万色", "Thread", "可能", "標準", "E26", "25,000h", "9W", "Matterの門。"] },
+            nes: { name: "Nanoleaf Essentials", price: "3,500", specs: ["800lm", "Ra 90", "1,600万色", "Thread", "可能", "標準", "E26", "25,000h", "9W", "Matter対応。"] },
             scl: { name: "SwitchBot シーリングP", price: "12,000", specs: ["5,499lm", "Ra 85", "暖白〜冷白", "Wi-Fi", "不可", "ハブ兼", "引掛", "40,000h", "40W", "家中を操る。"] },
             itr: { name: "IKEA TRÅDFRI", price: "3,990", specs: ["806lm", "Ra 80", "暖白〜冷白", "Zigbee", "不可", "標準", "E26", "25,000h", "9W", "民主的スマート。"] }
         }
@@ -190,28 +213,37 @@ const db = {
     }
 };
 
+let curC = 'cleaning';
+
 function toggleMega(id) {
     const el = document.getElementById(id);
-    const show = el.style.display === 'block';
-    document.querySelectorAll('.mega-menu').forEach(m => m.style.display = 'none');
-    el.style.display = show ? 'none' : 'block';
+    const isActive = el.classList.contains('active');
+    document.querySelectorAll('.mega-menu').forEach(m => m.classList.remove('active'));
+    if(!isActive) el.classList.add('active');
 }
 
-function toggleMobile() { document.getElementById('m_nav').classList.toggle('active'); }
+function toggleMobile() {
+    const nav = document.getElementById('m_nav');
+    const togg = document.getElementById('togg');
+    nav.classList.toggle('active');
+    togg.classList.toggle('active');
+}
 
 function showPage(p) {
     document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.mega-menu').forEach(m => m.style.display = 'none');
+    document.querySelectorAll('.mega-menu').forEach(m => m.classList.remove('active'));
     document.getElementById('m_nav').classList.remove('active');
+    document.getElementById('togg').classList.remove('active');
+
     if(p === 'top') document.getElementById('top').classList.add('active');
     else {
-        const [c, m] = p.split('_'); 
+        const [c, m] = p.split('_'); curC = c;
         if(m === 'list') {
-            document.getElementById('lT').innerText = db[c].labels[9];
+            document.getElementById('lT').innerText = c.toUpperCase();
             let h = '';
             for(let k in db[c].products) {
                 const x = db[c].products[k];
-                h += `<div class="card" onclick="alert('${x.name}: ${x.specs[9]}')">
+                h += `<div class="card" onclick="showDetail('${c}','${k}')">
                     <img src="https://via.placeholder.com/400x250/f5f5f7/1d1d1f?text=${x.name}">
                     <h3>${x.name}</h3><p>${x.price}円〜</p></div>`;
             }
@@ -219,13 +251,13 @@ function showPage(p) {
         } else {
             const ks = Object.keys(db[c].products);
             document.getElementById('sL').innerHTML = document.getElementById('sR').innerHTML = ks.map(k=>`<option value="${k}">${db[c].products[k].name}</option>`).join('');
-            document.getElementById('sR').selectedIndex = 1; curC = c; renderC();
+            document.getElementById('sR').selectedIndex = 1; renderC();
             document.getElementById('compareP').classList.add('active');
         }
     }
+    window.scrollTo(0,0);
 }
 
-let curC = 'cleaning';
 function renderC() {
     const kL = document.getElementById('sL').value, kR = document.getElementById('sR').value;
     const pL = db[curC].products[kL], pR = db[curC].products[kR];
@@ -237,9 +269,26 @@ function renderC() {
     });
     document.getElementById('cG').innerHTML = h;
 }
+
+function showDetail(c, k) {
+    const x = db[c].products[k];
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.mega-menu').forEach(m => m.classList.remove('active'));
+    document.getElementById('detC').innerHTML = `<div style="text-align:center; padding:100px 20px;">
+        <h1>${x.name}</h1><p style="font-size:24px; color:var(--文字-副); margin:30px 0;">${x.specs[9]}</p>
+        <div style="background:var(--背景-淡); padding:40px; border-radius:30px; display:inline-block;">
+            <p>価格: ${x.price}円</p><p>主要スペック: ${x.specs[0]}</p>
+        </div></div>`;
+    document.getElementById('detP').classList.add('active');
+    window.scrollTo(0,0);
+}
+
+window.onscroll = () => { document.getElementById('bgGrid').style.transform = `translateY(${window.pageYOffset * 0.1}px)`; };
 </script>
 </body>
 </html>
+
+
 
 
 
