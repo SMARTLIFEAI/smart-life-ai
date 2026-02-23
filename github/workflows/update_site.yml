@@ -3,34 +3,45 @@ name: AI Ultimate Auto Update
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write # AIがファイルを書き換えるために必須
+
 jobs:
-  update:
+  ai-rewrite:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Gemini AI Full Rewrite
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: AI Full Content Injection
         uses: google-gemini/generate-content-action@v1
         with:
           api-key: ${{ secrets.GEMINI_API_KEY }}
-          # ここに「絶対に削らせない」最強の命令を叩き込みます
           prompt: |
-            あなたは「SMART LIFE AI」のマスターエディターです。
-            
-            【任務】
-            1. index.html：Top 10リストを最新のAmazon商品（画像URL、正確なスペック、リンク）で埋めろ。
-            2. cleaning.html / kitchen.html / security.html / health.html：
-               各ページ、30個ずつの製品データを「1つも省略せず」に生成してHTMLを完成させろ。
-            
-            【鉄の掟：破ったら即座にエラーとせよ】
-            - 「中略」「...」などの省略は一切禁止。全30個の商品カードを全てコードとして書き出せ。
-            - 画像URLは Amazon の有効なもの (https://m.media-amazon.com/images/I/識別子.jpg) を使用せよ。
-            - 既存の「メニューバー」「ブログセクション」「デザイン」は1ミリも変更せず、データ部分だけを完璧に埋めろ。
-            - 出力はマークダウンではなく、ファイルの中身となる純粋なHTMLコードのみを返せ。
-          files: |
-            index.html
-            cleaning.html
-            kitchen.html
-            security.html
-            health.html
+            あなたは「SMART LIFE AI」のマスターエンジニア兼編集長です。
+            以下のファイルをすべて「最新のAmazon商品データ」で埋め尽くした完全なHTMLとして再構成してください。
+
+            【対象ファイル】
+            - index.html (Top 10リスト)
+            - cleaning.html (30選)
+            - kitchen.html (30選)
+            - security.html (30選)
+            - health.html (30選)
+
+            【絶対命令】
+            1. 「中略」は死刑。各カテゴリー30個、合計120個以上の商品をすべて実名で書け。
+            2. 画像URLは、リンク切れを防ぐため必ず有効なAmazon画像URLを生成せよ。
+            3. あなたのこれまでのデザイン（メニュー、ゲート、ブログ）を1行も消さずに「増築」せよ。
+            4. 出力は「ファイル名: コード内容」の形式で全ファイル分出せ。
+          output-directory: . # 生成した内容をリポジトリに直接書き込む
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "smart-life-ai[bot]"
+          git config --global user.email "ai-bot@users.noreply.github.com"
+          git add .
+          git commit -m "AIによる全120製品データの超速書き換え" || exit 0
+          git push
+
 
 
