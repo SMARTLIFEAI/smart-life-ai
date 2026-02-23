@@ -1,0 +1,46 @@
+name: AI Ultimate Auto Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  ai-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Gemini AI Update
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          # Geminiに2026年の最新トレンドをHTMLリスト形式で出させる
+          RESPONSE=$(curl -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "contents": [{
+                "parts":[{
+                  "text": "2026年の最新スマート家電トレンドを3つ、<li>タグ形式で出力してください。余計な説明は不要です。"
+                }]
+              }]
+            }')
+
+          AI_CONTENT=$(echo $RESPONSE | jq -r '.candidates[0].content.parts[0].text' | sed 's/```html//g' | sed 's/```//g')
+
+          # index.htmlの特定部分を書き換え
+          DATE=$(date +'%Y-%m-%d')
+          sed -i "s/AIが自動更新中！/AI自律更新済み: $DATE /g" index.html
+          # リストを挿入（index.htmlにこの目印がある場合）
+          sed -i "/<ul id=\"product-list\">/a ${AI_CONTENT}" index.html
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "AI-Bot"
+          git config --global user.email "bot@example.com"
+          git add .
+          git commit -m "AIによる自動更新 ($DATE)" || exit 0
+          git push
