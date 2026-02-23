@@ -18,16 +18,18 @@ jobs:
         id: gemini
         with:
           api-key: ${{ secrets.GEMINI_API_KEY }}
-          # 1ファイルに絞ることで確実に成功させます
-          prompt: "index.htmlのコードを全行出力してください。Top 10製品は最新のAmazon実名・実画像にすること。中略は禁止。HTMLのみを返せ。"
+          # 説明抜きで「コードだけ」を出すように超厳格に指示
+          prompt: "index.htmlの完全なコードのみを出力してください。マークダウン（```）や説明文は一切含めず、<!DOCTYPE html>から始めてください。中略は禁止。画像はAmazonの実画像URLにすること。"
 
-      - name: Save and Push
+      - name: Clean and Save
         run: |
-          echo "${{ steps.gemini.outputs.content }}" > index.html
+          # AIがもし```htmlなどをつけても、それを除去して保存する処理
+          echo "${{ steps.gemini.outputs.content }}" > raw.txt
+          sed -i '/^```/d' raw.txt
+          cat raw.txt > index.html
+          
           git config --global user.name "AI-Bot"
           git config --global user.email "bot@example.com"
           git add index.html
-          git commit -m "AI-Bot: index.html 10選フルアップデート成功" || exit 0
+          git commit -m "AI-Bot: index.htmlの自動更新に成功" || exit 0
           git push origin main
-
-
