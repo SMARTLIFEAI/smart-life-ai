@@ -1,0 +1,63 @@
+name: AI Auto Update Content
+
+on:
+  workflow_dispatch: # 手動実行用
+
+permissions:
+  contents: write
+
+jobs:
+  update-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate Content with Gemini
+        uses: google-gemini/generate-content-action@v1
+        id: gemini
+        with:
+          api-key: ${{ secrets.GEMINI_API_KEY }}
+          prompt: |
+            あなたは「SMART LIFE AI」のマスターエンジニアです。
+            以下のファイルを、最新のAmazon商品30個ずつで埋めた完全なHTMLとして出力してください。
+            中略は絶対禁止。画像URLは必ず有効なものにしてください。
+            ---FILE:index.html---
+            (ここに全コード)
+            ---FILE:cleaning.html---
+            (ここに全コード)
+            ---FILE:kitchen.html---
+            (ここに全コード)
+            ---FILE:security.html---
+            (ここに全コード)
+            ---FILE:health.html---
+            (ここに全コード)
+
+      - name: Overwrite Files
+        run: |
+          # Geminiの出力を一時ファイルに保存
+          echo "${{ steps.gemini.outputs.content }}" > full_output.txt
+          
+          # Pythonでファイルを物理的に分割・上書き（確実に実行されるように修正）
+          python3 -c "
+          import re
+          content = open('full_output.txt').read()
+          # ---FILE:filename--- という形式を正規表現で探して分割
+          parts = re.split(r'---FILE:(.*?)---', content)
+          for i in range(1, len(parts), 2):
+              filename = parts[i].strip()
+              file_code = parts[i+1].strip()
+              if filename and file_code:
+                  with open(filename, 'w') as f:
+                      f.write(file_code)
+                  print(f'Updated: {filename}')
+          "
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "AI-Bot"
+          git config --global user.email "bot@example.com"
+          git add index.html cleaning.html kitchen.html security.html health.html
+          # 変化があればコミット、なければパス
+          git commit -m "AIによる120製品フルアップデート（中略なし）" || exit 0
+          git push origin main
