@@ -3,268 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMART LIFE AI | The Master Node</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>スマート・モノ | 暮らしの知性を比較する</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap');
+        :root {
+            --白: #ffffff;
+            --文字-主: #1d1d1f;
+            --文字-副: #86868b;
+            --アクセント: #0066cc;
+            --境界: #d2d2d7;
+            --背景-淡: #f5f5f7;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; background-color: var(--白); color: var(--文字-主);
+            font-family: 'Noto Sans JP', sans-serif; -webkit-font-smoothing: antialiased;
+            overflow-x: hidden; line-height: 1.5;
+        }
+
+        /* --- 多重パララックス背景 --- */
+        .parallax-wrapper {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none; background: #fcfcfd;
+        }
+        .bg-layer { position: absolute; width: 100%; height: 200%; top: 0; left: 0; }
+        .grid-layer {
+            background-image: linear-gradient(var(--背景-淡) 1px, transparent 1px), linear-gradient(90deg, var(--背景-淡) 1px, transparent 1px);
+            background-size: 80px 80px; opacity: 0.5;
+        }
+        .circle-layer {
+            background: radial-gradient(circle at 20% 30%, #ebebeb 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, #f0f0f0 0%, transparent 50%);
+            filter: blur(60px); opacity: 0.6;
+        }
+
+        /* --- ナビゲーション --- */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 9000;
+            background: rgba(255,255,255,0.8); backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--境界);
+        }
+        .nav-container {
+            max-width: 1024px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 22px; height: 48px;
+        }
+        .logo { font-weight: 700; font-size: 18px; text-decoration: none; color: var(--文字-主); cursor: pointer; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-size: 12px; color: var(--文字-主); text-decoration: none; opacity: 0.8; transition: 0.3s; cursor: pointer; }
+        .nav-links a:hover { opacity: 1; color: var(--アクセント); }
+
+        /* --- コンテンツ表示制御 --- */
+        .page { display: none; padding-top: 48px; min-height: 100vh; animation: fadeIn 0.8s cubic-bezier(0.2, 1, 0.2, 1); }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- トップページ --- */
+        .hero { padding: 140px 20px 80px; text-align: center; }
+        .hero h1 { font-size: clamp(40px, 8vw, 64px); font-weight: 700; margin: 0; letter-spacing: -0.03em; }
+        .hero p { font-size: 21px; color: var(--文字-副); margin-top: 24px; }
         
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #ffffff; 
-            color: #121212; 
-            scroll-behavior: smooth;
+        .category-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px; max-width: 1100px; margin: 0 auto 120px; padding: 0 20px;
+        }
+        .cat-card {
+            background: rgba(255,255,255,0.7); border: 1px solid var(--境界);
+            border-radius: 24px; padding: 60px 40px; text-align: center;
+            transition: 0.5s cubic-bezier(0.15, 0, 0.2, 1); cursor: pointer;
+            backdrop-filter: blur(12px);
+        }
+        .cat-card:hover { transform: scale(1.02); border-color: var(--文字-主); background: #fff; }
+        .cat-card h3 { margin: 0 0 12px; font-size: 28px; font-weight: 600; letter-spacing: 0.1em; }
+        .cat-card p { color: var(--文字-副); font-size: 15px; margin: 0; }
+
+        /* --- カテゴリー比較ページ --- */
+        .comp-header { padding: 100px 20px 40px; text-align: center; }
+        .comp-header h1 { font-size: 40px; font-weight: 700; }
+        
+        .comparison-container { max-width: 1024px; margin: 0 auto; padding: 0 22px 120px; }
+        .compare-selector {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+            padding-bottom: 60px; margin-bottom: 40px; border-bottom: 1px solid var(--境界);
+        }
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        
+        .product-col { text-align: center; transition: opacity 0.4s ease; }
+        .prod-img { width: 100%; height: 280px; object-fit: contain; margin-bottom: 30px; }
+        
+        select {
+            width: 100%; max-width: 320px; padding: 14px; border-radius: 12px;
+            border: 1px solid var(--境界); font-size: 16px; font-weight: 600;
+            appearance: none; background: #fff url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>') no-repeat right 15px center;
+            background-size: 16px; cursor: pointer; outline: none;
         }
 
-        /* ナビゲーション */
-        .tech-nav { 
-            background: rgba(255, 255, 255, 0.8); 
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid #eee;
-        }
+        /* スペック詳細エリア */
+        .spec-item { padding: 48px 0; border-top: 1px solid #f0f0f0; }
+        .spec-value { font-size: 32px; font-weight: 700; display: block; letter-spacing: -0.01em; }
+        .spec-label { font-size: 13px; font-weight: 700; color: var(--アクセント); margin: 8px 0 12px; display: block; text-transform: uppercase; }
+        .spec-desc { font-size: 13px; color: var(--文字-副); max-width: 300px; margin: 0 auto; line-height: 1.7; }
 
-        /* ボタン */
         .btn-buy {
-            background: #121212;
-            color: #fff;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            font-family: 'JetBrains Mono', monospace;
+            display: inline-block; background: var(--文字-主); color: #fff;
+            padding: 10px 24px; border-radius: 980px; text-decoration: none;
+            font-size: 14px; font-weight: 500; margin-bottom: 12px; transition: 0.3s;
         }
-        .btn-buy:hover {
-            background: #444;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
+        .btn-buy:hover { opacity: 0.8; transform: translateY(-1px); }
+        .link-more { display: block; color: var(--アクセント); font-size: 14px; text-decoration: none; margin-bottom: 40px; }
 
-        .quick-link {
-            border: 1px solid #e5e7eb;
-            transition: all 0.3s ease;
-        }
-        .quick-link:hover {
-            background: #fafafa;
-            border-color: #000;
-        }
-
-        /* 10製品スペック比較表 */
-        .spec-grid {
-            border-top: 1px solid #f0f0f0;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            text-align: left;
-        }
-        .spec-item {
-            margin-bottom: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            border-bottom: 1px dotted #e5e7eb;
-        }
-        .spec-v { font-weight: 700; font-size: 0.95rem; }
-        .spec-l { font-size: 0.65rem; color: #999; text-transform: uppercase; font-weight: 800; }
-
-        /* カテゴリーゲート */
-        .gate-box {
-            position: relative; height: 450px; border-radius: 24px; overflow: hidden;
-            background: #000;
-        }
-        .gate-img { 
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.6;
-            transition: transform 1s ease;
-        }
-        .gate-box:hover .gate-img { transform: scale(1.05); opacity: 0.8; }
-        .gate-text {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            padding: 40px; background: linear-gradient(transparent, rgba(0,0,0,0.9));
-        }
-
-        .chat-pulse { position: relative; }
-        .chat-pulse::after { 
-            content: ''; position: absolute; width: 8px; height: 8px; background: #00ff41; 
-            border-radius: 50%; right: 0; top: 0; animation: pulse 2s infinite; 
-        }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+        footer { padding: 100px 20px; border-top: 1px solid var(--境界); text-align: center; font-size: 12px; color: var(--文字-副); background: #fff; }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <nav class="fixed top-0 w-full tech-nav z-[100] h-14 flex items-center justify-between px-8">
-        <a href="index.html" class="font-extrabold text-xl tracking-tighter uppercase italic">Smart Life AI</a>
-        <div class="hidden lg:flex space-x-8 text-[10px] font-black uppercase tracking-widest text-gray-400">
-            <a href="#top10" class="hover:text-black transition">Analysis 10</a>
-            <a href="cleaning.html" class="hover:text-black transition">Cleaning</a>
-            <a href="kitchen.html" class="hover:text-black transition">Kitchen</a>
-            <a href="security.html" class="hover:text-black transition">Security</a>
-            <a href="health.html" class="hover:text-black transition">Health</a>
-            <a href="#journal" class="hover:text-black transition">Journal</a>
-        </div>
-    </nav>
+<div class="parallax-wrapper">
+    <div class="bg-layer grid-layer" id="bgGrid"></div>
+    <div class="bg-layer circle-layer" id="bgCircle"></div>
+</div>
 
-    <header class="pt-40 pb-16 text-center px-6">
-        <h1 class="text-5xl md:text-8xl font-extrabold tracking-tighter leading-[0.9] mb-10">家事を、<br>AIに解放する。</h1>
-        <div class="max-w-3xl mx-auto flex flex-wrap justify-center gap-3">
-            <a href="cleaning.html" class="quick-link px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-tighter">Cleaning / 30 items</a>
-            <a href="kitchen.html" class="quick-link px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-tighter">Kitchen / 30 items</a>
-            <a href="security.html" class="quick-link px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-tighter">Security / 30 items</a>
-            <a href="health.html" class="quick-link px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-tighter">Health / 30 items</a>
-        </div>
-    </header>
+<header>
+    <div class="nav-container">
+        <div class="logo" onclick="showPage('top')">スマート・モノ</div>
+        <nav class="nav-links">
+            <a onclick="showPage('cleaning')">掃除機</a>
+            <a onclick="showPage('lighting')">照明</a>
+            <a onclick="showPage('security')">防犯</a>
+        </nav>
+    </div>
+</header>
 
-    <section id="top10" class="max-w-[1500px] mx-auto px-6 py-24 border-t border-gray-100">
-        <div class="mb-16">
-            <h2 class="text-3xl font-black italic tracking-tighter uppercase">The Top 10 Selection</h2>
-            <p class="text-xs text-gray-400 font-bold tracking-widest uppercase mt-2">Data-Driven Comparative Analysis</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/61NlUoNfBvL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8" alt="Roborock">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">Roborock S8 Pro</h3>
-                <a href="https://www.amazon.co.jp/dp/B0C6XY7G8F?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Suction</span><span class="spec-v">10,000Pa</span></div>
-                    <div class="spec-item"><span class="spec-l">Mop</span><span class="spec-v">Dual Sonic</span></div>
-                </div>
+<main>
+    <div id="top" class="page active">
+        <section class="hero">
+            <h1>暮らしを、選ぶ。</h1>
+            <p>プロの視点とデータで、理想のスマートホームを導き出す。</p>
+        </section>
+        <div class="category-grid">
+            <div class="cat-card" onclick="showPage('cleaning')">
+                <h3>CLEANING</h3>
+                <p>自動掃除機の最高峰を比較する</p>
             </div>
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/51wXkY7vSFL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8" alt="SwitchBot">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">Lock Pro</h3>
-                <a href="https://www.amazon.co.jp/dp/B0CTH6DPRR?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Auth</span><span class="spec-v">Fingerprint</span></div>
-                    <div class="spec-item"><span class="spec-l">Battery</span><span class="spec-v">270 Days</span></div>
-                </div>
+            <div class="cat-card" onclick="showPage('lighting')">
+                <h3>LIGHTING</h3>
+                <p>光の質で、暮らしを調律する</p>
             </div>
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/61SOnC11D9L._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8" alt="T-fal">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">Cook4me Touch</h3>
-                <a href="https://www.amazon.co.jp/dp/B0B6Z9J7L4?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Recipes</span><span class="spec-v">250+</span></div>
-                    <div class="spec-item"><span class="spec-l">Control</span><span class="spec-v">Full App</span></div>
-                </div>
-            </div>
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/51D6M0UeXWL._AC_SL1200_.jpg" class="h-40 w-full object-contain mb-8" alt="Dyson">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">Dyson V15</h3>
-                <a href="https://www.amazon.co.jp/dp/B09575LGYL?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Laser</span><span class="spec-v">Detection</span></div>
-                    <div class="spec-item"><span class="spec-l">Run Time</span><span class="spec-v">60 Mins</span></div>
-                </div>
-            </div>
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/61z-v6hR2PL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8" alt="Philips">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">Hue White & Color</h3>
-                <a href="https://www.amazon.co.jp/dp/B08M9BPC8V?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Colors</span><span class="spec-v">16M+</span></div>
-                    <div class="spec-item"><span class="spec-l">Sync</span><span class="spec-v">Music/TV</span></div>
-                </div>
-            </div>
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/718tSg0iZcL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8" alt="EcoFlow">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">EcoFlow DELTA 2</h3>
-                <a href="https://www.amazon.co.jp/dp/B0B9XF5R9X?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Capacity</span><span class="spec-v">1024Wh</span></div>
-                    <div class="spec-item"><span class="spec-l">Output</span><span class="spec-v">1500W</span></div>
-                </div>
-            </div>
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/41K-SntmO8L._AC_SL1000_.jpg" class="h-40 w-full object-contain mb-8" alt="Ring">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">Ring Doorbell 4</h3>
-                <a href="https://www.amazon.co.jp/dp/B08N5N66S7?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Quality</span><span class="spec-v">1080p HD</span></div>
-                    <div class="spec-item"><span class="spec-l">Feature</span><span class="spec-v">Pre-Roll</span></div>
-                </div>
-            </div>
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/61NfIscX8iL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8" alt="Balmuda">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">The Toaster Pro</h3>
-                <a href="https://www.amazon.co.jp/dp/B0BC7N3F5B?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Steam</span><span class="spec-v">5cc Water</span></div>
-                    <div class="spec-item"><span class="spec-l">Mode</span><span class="spec-v">Salamander</span></div>
-                </div>
-            </div>
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/61M-W0qDshL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8" alt="Apple">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">HomePod 2</h3>
-                <a href="https://www.amazon.co.jp/dp/B0BSRDDPG1?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Audio</span><span class="spec-v">Spatial</span></div>
-                    <div class="spec-item"><span class="spec-l">Sensing</span><span class="spec-v">Temp/Hum</span></div>
-                </div>
-            </div>
-            <div class="p-6 border border-gray-100 rounded-3xl hover:border-black transition-all duration-500">
-                <img src="https://m.media-amazon.com/images/I/81I-I-F+oPL._AC_SL1500_.jpg" class="h-40 w-full object-contain mb-8" alt="Sony">
-                <h3 class="font-bold text-lg leading-tight mb-4 h-10 overflow-hidden">Bravia A80L</h3>
-                <a href="https://www.amazon.co.jp/dp/B0C39G7N3B?tag=smartlife00-22" class="btn-buy w-full block py-2 rounded-lg text-[10px] font-bold uppercase text-center">Amazon</a>
-                <div class="spec-grid">
-                    <div class="spec-item"><span class="spec-l">Panel</span><span class="spec-v">OLED 4K</span></div>
-                    <div class="spec-item"><span class="spec-l">Engine</span><span class="spec-v">Cognitive XR</span></div>
-                </div>
+            <div class="cat-card" onclick="showPage('security')">
+                <h3>SECURITY</h3>
+                <p>見守る知性で、安心をデザインする</p>
             </div>
         </div>
-    </section>
-
-    <section id="categories" class="max-w-[1500px] mx-auto px-6 py-32 bg-gray-50">
-        <h2 class="text-center text-xs font-black tracking-[0.5em] text-gray-300 uppercase mb-16">Deep Dive into Specialized Archives</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <a href="cleaning.html" class="gate-box">
-                <img src="https://m.media-amazon.com/images/I/61NlUoNfBvL._AC_SL1500_.jpg" class="gate-img" alt="Cleaning">
-                <div class="gate-text">
-                    <span class="text-white/50 text-[10px] font-bold tracking-widest uppercase">Archive 01</span>
-                    <h3 class="text-4xl font-extrabold text-white">Cleaning Selection 30</h3>
-                </div>
-            </a>
-            <a href="kitchen.html" class="gate-box">
-                <img src="https://m.media-amazon.com/images/I/61SOnC11D9L._AC_SL1500_.jpg" class="gate-img" alt="Kitchen">
-                <div class="gate-text">
-                    <span class="text-white/50 text-[10px] font-bold tracking-widest uppercase">Archive 02</span>
-                    <h3 class="text-4xl font-extrabold text-white">Kitchen Selection 30</h3>
-                </div>
-            </a>
-            <a href="security.html" class="gate-box mt-8 md:mt-0">
-                <img src="https://m.media-amazon.com/images/I/51wXkY7vSFL._AC_SL1500_.jpg" class="gate-img" alt="Security">
-                <div class="gate-text">
-                    <span class="text-white/50 text-[10px] font-bold tracking-widest uppercase">Archive 03</span>
-                    <h3 class="text-4xl font-extrabold text-white">Security Selection 30</h3>
-                </div>
-            </a>
-            <a href="health.html" class="gate-box mt-8 md:mt-0">
-                <img src="https://m.media-amazon.com/images/I/61pS7vG1lmL._AC_SL1500_.jpg" class="gate-img" alt="Health">
-                <div class="gate-text">
-                    <span class="text-white/50 text-[10px] font-bold tracking-widest uppercase">Archive 04</span>
-                    <h3 class="text-4xl font-extrabold text-white">Health Selection 30</h3>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <section id="journal" class="py-40 max-w-4xl mx-auto px-6">
-        <h2 class="text-xs font-black tracking-[0.5em] text-gray-300 uppercase mb-20 text-center">Journal</h2>
-        <div id="blog-list">
-            <a href="article1.html" class="group">
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Feb 2026 / Case Study</p>
-                <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter group-hover:text-gray-500 transition leading-none text-gray-800">2026年、AIが変える<br>「家事ゼロ」の暮らし</h3>
-                <p class="mt-8 text-lg text-gray-400 font-light leading-relaxed">最新の自律型ロボットとGemini 3 Flashが共生する、新しい生活の定義。私たちのライフスタイルはどう変わるのか。</p>
-            </a>
-        </div>
-    </section>
-
-    <div class="fixed bottom-8 right-8 z-[200]">
-        <button class="bg-black text-white p-6 rounded-full shadow-2xl chat-pulse">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-        </button>
     </div>
 
-    <footer class="py-20 text-center text-[10px] font-black tracking-[0.4em] uppercase text-gray-200">
-        &copy; 2026 SMART LIFE AI. All Commitments Integrated.
-    </footer>
+    <div id="categoryView" class="page">
+        <section class="comp-header">
+            <h1 id="categoryTitle">カテゴリー</h1>
+        </section>
+        
+        <div class="comparison-container">
+            <div class="compare-selector">
+                <div style="text-align: center;">
+                    <select id="selectL" onchange="updateComp('L')"></select>
+                </div>
+                <div style="text-align: center;">
+                    <select id="selectR" onchange="updateComp('R')"></select>
+                </div>
+            </div>
+
+            <div class="compare-grid">
+                <div class="product-col" id="colL"></div>
+                <div class="product-col" id="colR"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>© 2026 スマート・モノ | すべての知性を、あなたの手に。</p>
+</footer>
+
+<script>
+    // --- 統合データベース ---
+    const database = {
+        cleaning: {
+            title: "掃除を、再定義する。",
+            products: {
+                roomba: {
+                    name: "Roomba Combo 10 Max",
+                    img: "https://i.imgur.com/vHq7FfM.png",
+                    specs: [
+                        { val: "2本", label: "DUAL RUBBER BRUSHES", desc: "独自のゴム製ブラシがゴミを浮かせ、ペットの毛も絡みません。" },
+                        { val: "完全自動", label: "DOCK EVOLUTION", desc: "モップの洗浄、乾燥、ゴミ捨て、給水をすべて自動で完結。" }
+                    ]
+                },
+                roborock: {
+                    name: "Roborock S8 MaxV Ultra",
+                    img: "https://i.imgur.com/K1V3zLd.png",
+                    specs: [
+                        { val: "10,000Pa", label: "EXTREME SUCTION", desc: "業界最高クラスのパワー。微細な埃も残さず吸引します。" },
+                        { val: "AI回避", label: "SMART OBSTACLE", desc: "カメラとセンサーで、床に置いた小物を正確に避けて掃除。" }
+                    ]
+                }
+            }
+        },
+        lighting: {
+            title: "光を、調律する。",
+            products: {
+                hue: {
+                    name: "Philips Hue ホワイトグラデーション",
+                    img: "https://i.imgur.com/O6L5UuR.png",
+                    specs: [
+                        { val: "50,000色", label: "COLOR DYNAMICS", desc: "集中からリラックスまで、白の階調を自由自在に操ります。" },
+                        { val: "Zigbee", label: "STABLE CONNECTION", desc: "多数の電球を遅延なく、安定して制御するプロの選択。" }
+                    ]
+                },
+                switchbot: {
+                    name: "SwitchBot シーリングライトプロ",
+                    img: "https://i.imgur.com/C7K7IuU.png",
+                    specs: [
+                        { val: "ハブ内蔵", label: "ALL-IN-ONE", desc: "これ一台で他の家電も操作可能。スマートホームの核になります。" },
+                        { val: "取付簡単", label: "JAPAN STANDARD", desc: "日本の一般的なソケットにそのまま設置できる安心設計。" }
+                    ]
+                }
+            }
+        },
+        security: {
+            title: "安心を、可視化する。",
+            products: {
+                ring: {
+                    name: "Ring Battery Doorbell Plus",
+                    img: "https://i.imgur.com/L4l3C1M.png",
+                    specs: [
+                        { val: "1536p", label: "HEAD-TO-TOE VIEW", desc: "足元の荷物から来客の顔まで、上下150度の広視野角で確認。" },
+                        { val: "双方向音声", label: "REALTIME TALK", desc: "外出先からでも、スマホ越しに配達員と会話が可能。" }
+                    ]
+                },
+                arlo: {
+                    name: "Arlo Pro 5",
+                    img: "https://i.imgur.com/E8R8XvX.png",
+                    specs: [
+                        { val: "2K HDR", label: "CRISP DETAIL", desc: "逆光でも鮮明。車のナンバープレートまで読み取れる高解像度。" },
+                        { val: "配線不要", label: "WEATHER RESISTANT", desc: "雨風に強く、どこにでも設置できる完全ワイヤレス設計。" }
+                    ]
+                }
+            }
+        }
+    };
+
+    let currentCategory = '';
+
+    // --- ページ遷移ロジック ---
+    function showPage(pageId) {
+        // 全ページ非表示
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        
+        if (pageId === 'top') {
+            document.getElementById('top').classList.add('active');
+        } else {
+            currentCategory = pageId;
+            const view = document.getElementById('categoryView');
+            const data = database[pageId];
+            
+            // カテゴリー情報更新
+            document.getElementById('categoryTitle').innerText = data.title;
+            
+            // セレクター初期化
+            const keys = Object.keys(data.products);
+            const sL = document.getElementById('selectL');
+            const sR = document.getElementById('selectR');
+            sL.innerHTML = sR.innerHTML = keys.map(k => `<option value="${k}">${data.products[k].name}</option>`).join('');
+            sR.selectedIndex = 1;
+
+            view.classList.add('active');
+            updateComp('L');
+            updateComp('R');
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        history.pushState({ page: pageId }, null, `#${pageId}`);
+    }
+
+    // --- 比較更新ロジック ---
+    function updateComp(side) {
+        const val = document.getElementById(`select${side}`).value;
+        const data = database[currentCategory].products[val];
+        const col = document.getElementById(`col${side}`);
+        
+        col.style.opacity = 0;
+        setTimeout(() => {
+            col.innerHTML = `
+                <img src="${data.img}" class="prod-img">
+                <a href="#" class="btn-buy">購入</a>
+                <a href="#" class="link-more">さらに詳しく ＞</a>
+                ${data.specs.map(s => `
+                    <div class="spec-item">
+                        <span class="spec-value">${s.val}</span>
+                        <span class="spec-label">${s.label}</span>
+                        <p class="spec-desc">${s.desc}</p>
+                    </div>
+                `).join('')}
+            `;
+            col.style.opacity = 1;
+        }, 300);
+    }
+
+    // --- ブラウザ戻る対応 ---
+    window.onpopstate = (e) => {
+        const page = (e.state && e.state.page) ? e.state.page : 'top';
+        showPage(page);
+    };
+
+    // --- パララックス ---
+    window.addEventListener('scroll', () => {
+        const y = window.pageYOffset;
+        document.getElementById('bgGrid').style.transform = `translateY(${y * 0.1}px)`;
+        document.getElementById('bgCircle').style.transform = `translateY(${y * 0.15}px)`;
+    });
+
+    // 初期起動
+    const hash = window.location.hash.replace('#', '');
+    showPage(hash || 'top');
+</script>
 
 </body>
 </html>
+
 
 
 
