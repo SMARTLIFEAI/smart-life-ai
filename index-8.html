@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>SMART LIFE AI | 効率化の頂点へ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --bg-color: #f2f2f7;
+            --card-bg: #ffffff;
+            --accent-blue: #007aff;
+            --text-main: #1c1c1e;
+            --text-sub: #8e8e93;
+            --border: #e5e5ea;
+        }
+
+        body { font-family: "Inter", "Hiragino Sans", sans-serif; margin: 0; background: var(--bg-color); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+
+        /* --- サイドメニュー --- */
+        .side-menu {
+            position: fixed; top: 0; left: -300px; width: 300px; height: 100%;
+            background: #fff; z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 60px 25px; box-sizing: border-box; box-shadow: 5px 0 20px rgba(0,0,0,0.1);
+        }
+        .side-menu.active { left: 0; }
+        .menu-close { position: absolute; top: 20px; right: 20px; font-size: 28px; cursor: pointer; }
+        .menu-item { display: block; padding: 18px 10px; text-decoration: none; color: var(--text-main); font-weight: 600; border-bottom: 1px solid var(--bg-color); font-size: 15px; }
+        .menu-item:hover { background: var(--bg-color); }
+
+        /* --- ヘッダー（重なり修正済み） --- */
+        header { 
+            background: #fff; padding: 10px 15px; display: flex; align-items: center; 
+            position: sticky; top: 0; z-index: 900; box-shadow: 0 1px 10px rgba(0,0,0,0.05); gap: 10px; 
+        }
+        .menu-trigger { font-size: 24px; cursor: pointer; width: 30px; flex-shrink: 0; }
+        .logo { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; flex-shrink: 0; margin-right: 5px; }
+        .search-container { flex: 1; min-width: 100px; }
+        .search-bar { width: 100%; border: none; background: var(--bg-color); padding: 8px 12px; border-radius: 10px; font-size: 14px; outline: none; box-sizing: border-box; }
+        .user-icon { font-size: 22px; cursor: pointer; width: 30px; text-align: right; flex-shrink: 0; }
+
+        /* --- ジャンルタブ --- */
+        .tabs { display: flex; gap: 12px; padding: 20px; overflow-x: auto; background: #fff; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab { padding: 8px 20px; background: #eee; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .tab.active { background: #000; color: #fff; }
+
+        /* --- ヒーロー --- */
+        .hero { padding: 60px 20px; text-align: center; background: #fff; }
+        .hero h1 { font-size: 32px; font-weight: 900; margin-bottom: 15px; line-height: 1.2; }
+        .hero p { color: var(--text-sub); font-size: 16px; margin-bottom: 0; }
+
+        /* --- 製品比較グリッド --- */
+        .section-header { padding: 40px 20px 10px; font-size: 22px; font-weight: 800; }
+        .compare-grid { display: flex; gap: 20px; padding: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .compare-grid::-webkit-scrollbar { display: none; }
+        .card { width: 280px; min-width: 280px; background: #fff; border-radius: 20px; scroll-snap-align: start; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .card-img { width: 100%; height: 200px; object-fit: contain; padding: 25px; box-sizing: border-box; background: #fff; border-radius: 20px 20px 0 0; }
+        .card-body { padding: 25px; }
+        .card-tag { font-size: 10px; font-weight: 800; color: var(--accent-blue); text-transform: uppercase; margin-bottom: 5px; }
+        .card-title { font-size: 19px; font-weight: 800; margin: 0 0 10px; }
+        .card-price { font-size: 17px; font-weight: 700; margin-bottom: 20px; }
+        .btn-buy { display: block; background: #000; color: #fff; text-align: center; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 14px; }
+
+        /* --- ブログセクション --- */
+        .blog-section { padding: 20px; max-width: 800px; margin: 0 auto; }
+        .blog-card { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 20px; border-left: 6px solid #000; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .blog-card h2 { font-size: 22px; margin-top: 0; line-height: 1.4; }
+        .blog-meta { color: var(--text-sub); font-size: 12px; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .blog-content { font-size: 15px; color: #444; line-height: 1.8; }
+
+        /* --- AIチャットUI --- */
+        .chat-container { padding: 40px 20px; max-width: 600px; margin: 0 auto; }
+        .chat-box { background: #fff; border-radius: 24px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+        #chat-messages { height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-bottom: 10px; }
+        .bubble { max-width: 85%; padding: 12px 18px; border-radius: 20px; font-size: 14px; font-weight: 500; }
+        .bot { background: var(--bg-color); color: #000; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .user { background: var(--accent-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-input-wrap { display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid #f0f0f5; padding-top: 20px; }
+        .chat-input { flex: 1; border: none; background: var(--bg-color); padding: 12px 20px; border-radius: 25px; font-size: 15px; outline: none; }
+        .btn-send { background: var(--accent-blue); color: #fff; border: none; width: 45px; height: 45px; border-radius: 50%; font-weight: 800; cursor: pointer; font-size: 18px; }
+
+        footer { padding: 60px 20px; text-align: center; color: var(--text-sub); font-size: 11px; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-close" onclick="toggleMenu()">×</div>
+    <div style="font-weight: 900; font-size: 22px; margin-bottom: 30px; letter-spacing: -1px;">SMART LIFE AI</div>
+    <a href="#" class="menu-item">🏠 ホーム</a>
+    <a href="#blog" class="menu-item" onclick="toggleMenu()">📝 ブログ・活用術</a>
+    <a href="#" class="menu-item">📂 ジャンル別比較</a>
+    <a href="#" class="menu-item">👤 会員情報</a>
+    <a href="#" class="menu-item">⚙️ 設定</a>
+    <div style="margin-top: 40px;">
+        <a href="#" style="display:block; background:#000; color:#fff; text-align:center; padding:15px; border-radius:12px; text-decoration:none; font-weight:700;">サブスク登録（Premium）</a>
+    </div>
+</div>
+
+<header>
+    <div class="menu-trigger" onclick="toggleMenu()">☰</div>
+    <div class="logo">SMART LIFE</div>
+    <div class="search-container">
+        <input type="text" class="search-bar" placeholder="製品、ブログを検索...">
+    </div>
+    <div class="user-icon" onclick="alert('会員ページは準備中です')">👤</div>
+</header>
+
+<div class="tabs">
+    <div class="tab active">すべて</div>
+    <div class="tab">掃除機</div>
+    <div class="tab">キッチン</div>
+    <div class="tab">セキュリティ</div>
+    <div class="tab">Apple製品</div>
+</div>
+
+<section class="hero">
+    <h1>自動化が、日常を自由にする。</h1>
+    <p>厳選されたガジェットとAIが、あなたの時間を創出します。</p>
+</section>
+
+<div class="section-header">比較して選ぶ</div>
+<div class="compare-grid" id="product-list"></div>
+
+<div class="section-header" id="blog">最新の活用術</div>
+<div class="blog-section">
+    <article class="blog-card">
+        <div class="blog-meta">STRATEGY | 2026.02.23</div>
+        <h2>家事の「思考停止」をデザインする。<br>月30時間を創出する3種の神器</h2>
+        <div class="blog-content">
+            <p>道具を手に入れただけでは、自由は訪れない。真の豊かさとは、家事という概念そのものを生活から消し去り、思考停止できる環境をデザインすることにある...</p>
+            <a href="#" style="color:#000; font-weight:800; text-decoration: none;">続きを読む →</a>
+        </div>
+    </article>
+</div>
+
+<div class="section-header">AIコンシェルジュに相談</div>
+<section class="chat-container">
+    <div class="chat-box">
+        <div id="chat-messages">
+            <div class="bubble bot">🤖 こんにちは。あなたのライフスタイルを自動化するための提案をします。</div>
+        </div>
+        <div class="chat-input-wrap">
+            <input type="text" id="chat-input" class="chat-input" placeholder="例：掃除を楽にしたい...">
+            <button class="btn-send" onclick="sendMessage()">↑</button>
+        </div>
+    </div>
+</section>
+
+<footer>
+    &copy; 2026 SMART LIFE AI. <br>一人で自動化、スマートな暮らしを。
+</footer>
+
+<script>
+    // 1. 製品データの管理（ここを増やすだけでカードが増えます）
+    const products = [
+        {
+            tag: "Cleaner",
+            title: "ルンバ j7+",
+            price: "¥99,800",
+            img: "https://m.media-amazon.com/images/I/61m02D7n06L._AC_SL1500_.jpg",
+            link: "#"
+        },
+        {
+            tag: "Hub",
+            title: "Echo Show 8",
+            price: "¥14,980",
+            img: "https://m.media-amazon.com/images/I/61T05PjU9KL._AC_SL1500_.jpg",
+            link: "#"
+        },
+        {
+            tag: "Security",
+            title: "SwitchBot Lock",
+            price: "¥11,980",
+            img: "https://m.media-amazon.com/images/I/51-vS2D6h1L._AC_SL1200_.jpg",
+            link: "#"
+        }
+    ];
+
+    // 2. 製品カードの描画
+    const productList = document.getElementById('product-list');
+    products.forEach(p => {
+        const card = `
+            <div class="card">
+                <img src="${p.img}" class="card-img">
+                <div class="card-body">
+                    <div class="card-tag">${p.tag}</div>
+                    <h3 class="card-title">${p.title}</h3>
+                    <div class="card-price">${p.price}</div>
+                    <a href="${p.link}" class="btn-buy">詳細を見る</a>
+                </div>
+            </div>
+        `;
+        productList.innerHTML += card;
+    });
+
+    // 3. メニュー開閉
+    function toggleMenu() {
+        document.getElementById('sideMenu').classList.toggle('active');
+    }
+
+    // 4. チャット機能
+    function addMessage(role, text) {
+        const box = document.getElementById("chat-messages");
+        const div = document.createElement("div");
+        div.className = "bubble " + role;
+        div.textContent = (role === 'bot' ? "🤖 " : "") + text;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById("chat-input");
+        if (!input.value) return;
+        addMessage("user", input.value);
+        const userText = input.value;
+        input.value = "";
+
+        setTimeout(() => {
+            let reply = "その目的であれば、ブログ記事にある『黄金のセット』の導入が近道です。特にスマートロックは生活を変えますよ。";
+            if(userText.includes("掃除")) reply = "掃除の自動化ならルンバが最適です。外出を検知して自動で動くように設定するのがコツです。";
+            addMessage("bot", reply);
+        }, 800);
+    }
+</script>
+
+</body>
+</html>
