@@ -13,200 +13,331 @@
             --アクセント: #0066cc;
             --境界: #d2d2d7;
             --背景-淡: #f5f5f7;
-            --透過-白: rgba(255, 255, 255, 0.8);
+            --透過-白: rgba(255, 255, 255, 0.85);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background-color: var(--白); color: var(--文字-主);
-            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+            background-color: var(--白);
+            color: var(--文字-主);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+            overflow-x: hidden;
         }
 
-        /* --- Apple風ナビゲーション (中央寄せ + 右端メニュー) --- */
+        /* --- 背景演出（絶対に変えない基礎） --- */
+        .parallax-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+        .grid-layer {
+            position: absolute; width: 100%; height: 200%;
+            background-image: linear-gradient(var(--背景-淡) 1px, transparent 1px), linear-gradient(90deg, var(--背景-淡) 1px, transparent 1px);
+            background-size: 80px 80px; opacity: 0.4;
+        }
+
+        /* --- ナビゲーション（Apple流ブラッシュアップ） --- */
         header {
             position: fixed; top: 0; width: 100%; z-index: 10000;
             background: var(--透過-白); backdrop-filter: saturate(180%) blur(20px);
             border-bottom: 1px solid var(--境界); height: 48px;
         }
         .nav-container {
-            max-width: 1000px; margin: 0 auto; display: flex;
-            justify-content: space-between; align-items: center; padding: 0 22px; height: 100%;
+            max-width: 1024px; margin: 0 auto; display: flex;
+            align-items: center; padding: 0 22px; height: 100%;
+            position: relative;
         }
-        .logo { font-weight: 700; font-size: 14px; letter-spacing: 0.1em; cursor: pointer; }
+        .logo { 
+            font-weight: 700; font-size: 13px; cursor: pointer; 
+            letter-spacing: 0.15em; color: var(--文字-主); text-transform: uppercase;
+            z-index: 10002;
+        }
         
-        /* 中央メニュー */
-        .center-links {
+        /* 中央寄せメニュー */
+        .nav-links { 
+            display: flex; gap: 32px; height: 100%;
             position: absolute; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 30px;
         }
-        .center-links a {
-            font-size: 12px; color: var(--文字-主); text-decoration: none;
-            opacity: 0.8; transition: 0.3s; cursor: pointer;
-        }
-        .center-links a:hover { opacity: 1; }
+        .nav-item { position: relative; display: flex; align-items: center; }
+        .nav-item > a { font-size: 12px; font-weight: 400; color: var(--文字-主); text-decoration: none; opacity: 0.8; cursor: pointer; transition: 0.3s; }
+        .nav-item:hover > a { opacity: 1; }
 
-        /* 右端三本線 */
-        .menu-icon {
-            cursor: pointer; display: flex; flex-direction: column; gap: 4px; z-index: 10001;
+        /* メガメニュー */
+        .mega-menu {
+            position: fixed; top: 48px; left: 0; width: 100%; background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid var(--境界); display: none; padding: 40px 0; animation: menuFade 0.4s ease;
         }
-        .menu-icon span {
-            width: 18px; height: 1px; background: var(--文字-主); transition: 0.3s;
-        }
+        @keyframes menuFade { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-item:hover .mega-menu { display: block; }
+        .menu-content { max-width: 1024px; margin: 0 auto; display: flex; gap: 60px; padding: 0 40px; }
+        .menu-column { display: flex; flex-direction: column; gap: 10px; }
+        .menu-label { font-size: 11px; color: var(--文字-副); font-weight: 500; margin-bottom: 4px; }
+        .menu-column a { font-size: 13px; font-weight: 600; color: var(--文字-主); text-decoration: none; cursor: pointer; }
 
-        /* Apple風 全画面メニュー */
-        .overlay-menu {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: var(--白); z-index: 9999; display: none;
-            flex-direction: column; padding: 80px 40px; animation: menuIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        /* 右端三本線アイコン */
+        .menu-toggle { 
+            margin-left: auto; z-index: 10002; cursor: pointer; 
+            display: flex; flex-direction: column; gap: 4px; padding: 10px;
         }
-        @keyframes menuIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        .overlay-menu.active { display: flex; }
-        .overlay-link { font-size: 28px; font-weight: 600; text-decoration: none; color: var(--文字-主); margin-bottom: 20px; }
+        .menu-toggle span { width: 18px; height: 1px; background: var(--文字-主); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .menu-toggle.active span:nth-child(1) { transform: translateY(2.5px) rotate(45deg); }
+        .menu-toggle.active span:nth-child(2) { transform: translateY(-2.5px) rotate(-45deg); }
 
-        /* --- ページ表示制御 --- */
-        .page { display: none; padding-top: 48px; animation: fadeIn 0.6s ease; }
+        /* 全画面モバイルメニュー */
+        .mobile-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 0; 
+            background: var(--白); overflow: hidden; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; padding: 0 40px; z-index: 9999;
+        }
+        .mobile-menu.active { height: 100vh; padding-top: 80px; }
+        .mobile-link { font-size: 28px; font-weight: 600; text-decoration: none; color: var(--文字-主); margin-bottom: 24px; opacity: 0; transform: translateY(20px); transition: 0.4s; }
+        .mobile-menu.active .mobile-link { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+
+        /* --- コンテンツ（基礎維持） --- */
+        .page { display: none; padding-top: 48px; min-height: 100vh; animation: fadeIn 0.8s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- カタログ & 詳細ページ --- */
-        .hero-section { text-align: center; padding: 80px 20px; }
-        .hero-section h1 { font-size: 56px; font-weight: 700; }
-        
+        .hero-section { text-align: center; padding: 100px 20px 60px; }
+        .hero-section h1 { font-size: clamp(40px, 8vw, 64px); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 20px; }
+        .hero-section p { font-size: clamp(18px, 4vw, 24px); color: var(--文字-副); max-width: 700px; margin: 0 auto; }
+
         .product-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px; max-width: 1100px; margin: 0 auto; padding: 40px 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px; max-width: 1200px; margin: 0 auto; padding: 40px 20px 120px;
         }
-        .card {
-            background: #fff; border-radius: 20px; padding: 40px; text-align: center;
-            border: 1px solid var(--境界); transition: 0.4s; cursor: pointer;
+        .product-card {
+            background: rgba(255,255,255,0.7); border-radius: 24px; padding: 50px 40px; text-align: center;
+            transition: 0.4s cubic-bezier(0.15, 0, 0.2, 1); border: 1px solid var(--境界);
+            backdrop-filter: blur(10px); cursor: pointer;
         }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-        .card img { width: 100%; height: 200px; object-fit: contain; margin-bottom: 20px; }
+        .product-card:hover { transform: scale(1.02); background: #fff; box-shadow: 0 30px 60px rgba(0,0,0,0.08); }
+        .product-card img { width: 100%; height: 240px; object-fit: contain; margin-bottom: 30px; }
+        .product-card h2 { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
 
-        /* 詳細ページ (Detail View) */
-        .detail-view { padding: 100px 20px; max-width: 900px; margin: 0 auto; }
-        .detail-hero { font-size: 48px; font-weight: 700; margin-bottom: 20px; text-align: center; }
-        .detail-story { font-size: 24px; color: var(--文字-副); text-align: center; margin-bottom: 60px; }
-        .spec-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
-        .spec-table td { padding: 20px; border-bottom: 1px solid var(--境界); }
-        .spec-key { font-weight: 600; width: 30%; color: var(--文字-副); }
+        /* --- 比較 UI --- */
+        .compare-ui { max-width: 1024px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 0 20px 100px; }
+        .spec-item { border-top: 1px solid var(--境界); padding: 40px 0; text-align: center; }
+        .spec-val { font-size: 28px; font-weight: 700; display: block; }
+        .spec-label { font-size: 11px; font-weight: 700; color: var(--アクセント); text-transform: uppercase; margin-top: 5px; display: block; letter-spacing: 0.1em; }
+        .spec-desc { font-size: 13px; color: var(--文字-副); margin-top: 10px; line-height: 1.6; padding: 0 20px; }
 
-        .btn-buy { background: var(--アクセント); color: #fff; padding: 12px 30px; border-radius: 30px; text-decoration: none; display: inline-block; margin-top: 20px; }
+        /* --- 詳細ページ（物語化） --- */
+        .detail-view { max-width: 1000px; margin: 0 auto; padding: 100px 20px; }
+        .detail-hero-text { font-size: clamp(32px, 6vw, 56px); font-weight: 700; text-align: center; margin-bottom: 20px; }
+        .detail-story-text { font-size: 24px; color: var(--文字-副); text-align: center; margin-bottom: 80px; }
+        .experience-section { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 100px; }
+        .experience-content h3 { font-size: 32px; margin-bottom: 20px; }
+        .experience-content p { color: var(--文字-副); font-size: 18px; line-height: 1.8; }
 
+        /* ボタン */
+        .btn-blue { background: var(--アクセント); color: #fff; padding: 12px 30px; border-radius: 980px; text-decoration: none; font-size: 16px; font-weight: 500; display: inline-block; transition: 0.2s; border: none; cursor: pointer; }
+        .btn-blue:hover { opacity: 0.9; transform: scale(1.05); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .product-grid { grid-template-columns: 1fr; }
+            .compare-ui { gap: 10px; }
+            .experience-section { grid-template-columns: 1fr; text-align: center; }
+        }
     </style>
 </head>
 <body>
+
+<div class="parallax-bg">
+    <div class="grid-layer" id="bgGrid"></div>
+</div>
 
 <header>
     <div class="nav-container">
         <div class="logo" onclick="showPage('top')">SMART HOME AI CONCIERGE</div>
         
-        <nav class="center-links">
-            <a onclick="showPage('cleaning')">掃除機</a>
-            <a onclick="showPage('lighting')">照明</a>
-            <a onclick="showPage('security')">防犯</a>
+        <nav class="nav-links">
+            <div class="nav-item">
+                <a onclick="showPage('cleaning_list')">掃除機</a>
+            </div>
+            <div class="nav-item">
+                <a onclick="showPage('lighting_list')">照明</a>
+            </div>
+            <div class="nav-item">
+                <a onclick="showPage('security_list')">防犯</a>
+            </div>
         </nav>
 
-        <div class="menu-icon" onclick="toggleMenu()">
-            <span id="b1"></span><span id="b2"></span>
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMobileMenu()">
+            <span></span><span></span>
         </div>
     </div>
 </header>
 
-<div class="overlay-menu" id="overlayMenu">
-    <a class="overlay-link" onclick="showPage('cleaning')">掃除機 一覧</a>
-    <a class="overlay-link" onclick="showPage('lighting')">照明 一覧</a>
-    <a class="overlay-link" onclick="showPage('security')">防犯 一覧</a>
-    <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--境界);">
-    <a class="overlay-link" style="font-size: 18px; color: var(--アクセント);">AIコンシェルジュに相談する</a>
+<div class="mobile-menu" id="mobileMenu">
+    <a class="mobile-link" onclick="showPage('cleaning_list')">CLEANING</a>
+    <a class="mobile-link" onclick="showPage('lighting_list')">LIGHTING</a>
+    <a class="mobile-link" onclick="showPage('security_list')">SECURITY</a>
+    <a class="mobile-link" onclick="showPage('cleaning_compare')" style="font-size: 16px; color: var(--アクセント)">COMPARE MODELS</a>
 </div>
 
-<main id="mainContent">
+<main>
     <div id="top" class="page active">
         <section class="hero-section">
             <h1>暮らしを、選ぶ。</h1>
-            <p>理想の知性を、あなたの家へ。</p>
+            <p>SMART HOME AI CONCIERGEが、<br>あなたの日常に最適な「知性」を導き出します。</p>
         </section>
         <div class="product-grid">
-            <div class="card" onclick="showPage('cleaning')"><h2>CLEANING</h2><p>掃除機の一覧へ</p></div>
-            <div class="card" onclick="showPage('lighting')"><h2>LIGHTING</h2><p>照明の一覧へ</p></div>
+            <div class="product-card" onclick="showPage('cleaning_list')">
+                <span class="menu-label" style="display:block; margin-bottom: 10px;">CLEANING</span>
+                <h2>掃除の概念を、過去にする。</h2>
+                <p class="price" style="color:var(--アクセント)">ロボット掃除機を見る ＞</p>
+            </div>
+            <div class="product-card" onclick="showPage('lighting_list')">
+                <span class="menu-label" style="display:block; margin-bottom: 10px;">LIGHTING</span>
+                <h2>光を、感情のままに。</h2>
+                <p class="price" style="color:var(--アクセント)">スマート照明を見る ＞</p>
+            </div>
         </div>
     </div>
 
-    <div id="listPage" class="page">
-        <div class="hero-section"><h1 id="listTitle"></h1></div>
-        <div id="listGrid" class="product-grid"></div>
+    <div id="catalogPage" class="page">
+        <section class="hero-section">
+            <h1 id="catTitle"></h1>
+            <p id="catSub"></p>
+        </section>
+        <div id="catGrid" class="product-grid"></div>
+    </div>
+
+    <div id="comparePage" class="page">
+        <div class="hero-section"><h1>モデルを比較する。</h1></div>
+        <div class="compare-ui">
+            <div class="comp-col">
+                <select id="selL" onchange="renderCompare('L')" style="width:100%; padding:12px; border-radius:12px; margin-bottom:30px;"></select>
+                <div id="colL"></div>
+            </div>
+            <div class="comp-col">
+                <select id="selR" onchange="renderCompare('R')" style="width:100%; padding:12px; border-radius:12px; margin-bottom:30px;"></select>
+                <div id="colR"></div>
+            </div>
+        </div>
     </div>
 
     <div id="detailPage" class="page">
-        <div class="detail-view" id="detailContent"></div>
+        <div id="detailContent"></div>
     </div>
 </main>
 
 <script>
-    // 圧倒的な製品データベース (一部抜粋、実際にはここを全20機種に拡充)
-    const db = {
-        cleaning: [
-            { id: 'r10', name: "Roomba Combo 10 Max", price: "197,800", story: "掃除を、忘れるための究極。", desc: "モップ洗浄から乾燥まで完全に自立した知性が、あなたの床を毎日、新品の状態に保ちます。", specs: {"吸引力": "iRobot史上最強", "自動洗浄": "AutoWash搭載", "回避能力": "PrecisionVision AI", "モップ": "完全自動昇降"} },
-            { id: 's8', name: "Roborock S8 MaxV Ultra", price: "188,000", story: "障害物を、思考で超える。", desc: "業界最強の吸引力と、壁際1mmまで磨き上げるサイドモップ。徹底した清掃が、ここから始まります。", specs: {"吸引力": "10,000Pa", "モップ": "高速振動＋回転", "回避能力": "3Dストラクチャードライト", "静音性": "極めて高い"} },
-            { id: 'x10', name: "Eufy X10 Pro Omni", price: "99,990", story: "最高の体験を、すべての人へ。", desc: "プレミアムな機能を、信じられない価格で。Ankerが提案する、新しい掃除のスタンダードです。", specs: {"吸引力": "8,000Pa", "自動ゴミ収集": "最大60日分", "AI回避": "100種類以上の障害物", "価格": "圧倒的コスパ"} }
-        ],
-        lighting: [
-            { id: 'hue', name: "Philips Hue フルカラー", price: "16,800", story: "光は、感情を描き出す。", desc: "5万色の白と1,600万の色。あなたの気分に合わせて、部屋の空気を一瞬で塗り替えます。", specs: {"カラー": "1,600万色", "接続": "Zigbee / Bluetooth", "同期": "映画・音楽対応", "寿命": "約25,000時間"} }
-        ]
+    const database = {
+        cleaning: {
+            title: "掃除機", sub: "掃除を、忘れるための究極。",
+            products: {
+                r10: { name: "Roomba Combo 10 Max", price: "197,800", story: "掃除を、忘れるための究極。", desc: "AutoWashドックがすべてを完結。あなたはただ、清潔な床を歩くだけです。", specs: [{v: "AutoWash", l: "MAINTENANCE", d: "洗浄から乾燥まで全自動。"}, {v: "パッド昇降", l: "CARPET", d: "世界で唯一、ラグを濡らさない。"}, {v: "PrecisionVision", l: "AI", d: "障害物を「見極め」回避する。"}, {v: "8,000Pa", l: "POWER", d: "微細なハウスダストも逃さない。"}, {v: "20mm", l: "CLIMB", d: "日本の住宅の段差も軽快に。"}, {v: "58dB", l: "SILENT", d: "家族の会話を邪魔しない。"} ] },
+                s8: { name: "Roborock S8 MaxV Ultra", price: "188,000", story: "障害物を、思考で超える。", desc: "壁際1mmまで磨き上げるサイドモップ。徹底した清掃が、ここから始まります。", specs: [{v: "Ultra Dock", l: "DOCK", d: "多機能自動ドックの頂点。"}, {v: "サイドモップ", l: "EDGE", d: "隅々の汚れを物理的に除去。"}, {v: "10,000Pa", l: "SUCTION", d: "業界最高クラスの圧倒的吸引力。"}, {v: "Reactive AI 2.0", l: "VISION", d: "3D光で暗闇の障害物も回避。"}, {v: "20mm", l: "CLIMB", d: "スムーズな部屋移動を実現。"}, {v: "62dB", l: "SILENT", d: "パワーと静音の完璧な両立。"} ] },
+                x10: { name: "Eufy X10 Pro Omni", price: "99,990", story: "最高の体験を、すべての人へ。", desc: "プレミアムな機能を、信じられない価格で。Ankerが提案する、新基準。", specs: [{v: "Omni Dock", l: "VALUE", d: "全自動機能をこの価格で実現。"}, {v: "8,000Pa", l: "POWER", d: "ペットの毛も確実に吸い込む。"}, {v: "AI.See", l: "AI", d: "100以上の物体を賢く避ける。"}, {v: "デュアル回転", l: "MOP", d: "加圧しながら床を磨き上げる。"}, {v: "19mm", l: "CLIMB", d: "標準的な段差を難なくクリア。"}, {v: "60dB", l: "SILENT", d: "静かな動作音。"} ] },
+                k10: { name: "SwitchBot K10+", price: "59,800", story: "世界最小級、知性は最大級。", desc: "日本の家のために。狭い隙間まで入り込み、徹底的に磨き上げます。", specs: [{v: "直径24.8cm", l: "SIZE", d: "椅子脚の間もすり抜ける。"}, {v: "自動収集", l: "STATION", d: "70日間ゴミ捨て不要。"}, {v: "45dB", l: "QUIET", d: "業界トップレベルの静音性。"}, {v: "LiDAR航法", l: "MAP", d: "暗闇でも正確に間取りを把握。"}, {v: "15mm", l: "CLIMB", d: "小回りの効く足回り。"}, {v: "2,500Pa", l: "POWER", d: "サイズ以上の清掃力。"} ] },
+                vis: { name: "Dyson 360 Vis Nav", price: "189,200", story: "ダイソンの吸引力を、自動で。", desc: "他の追随を許さない吸引力。それは、ロボットの形をしたダイソンそのもの。", specs: [{v: "Hyperdymium", l: "MOTOR", d: "毎分11万回転の圧倒的パワー。"}, {v: "360°Vision", l: "EYE", d: "全方位を認識し自位置を特定。"}, {v: "エッジノズル", l: "EDGE", d: "壁際のゴミを自動で検知。"}, {v: "HEPA", l: "FILTER", d: "ウイルスまで捉える排気性能。"}, {v: "21mm", l: "CLIMB", d: "力強い走破性。"}, {v: "65dB", l: "SILENT", d: "吸引力重視の設計。"} ] }
+            }
+        },
+        lighting: {
+            title: "照明", sub: "光を、調律する。",
+            products: {
+                hue: { name: "Philips Hue フルカラー", price: "16,800", story: "その光は、感情を描き出す。", desc: "1,600万色が、あなたの部屋を無限のキャンバスに変える。", specs: [{v: "1,600万色", l: "COLOR", d: "映画や音楽と完璧にシンクロ。"}, {v: "Zigbee", l: "CONNECT", d: "遅延のない究極の安定性。"}, {v: "Matter", l: "STANDARDS", d: "次世代の標準規格に対応。"}, {v: "800lm", l: "BRIGHT", d: "十分な明るさと豊かな色彩。"}, {v: "2,000-6,500K", l: "TEMP", d: "集中からリラックスまで。"}, {v: "Ra 90", l: "COLOR_INDEX", d: "肌の色も美しく映す。"} ] }
+            }
+        },
+        security: {
+            title: "防犯", sub: "安心を、デザインする。",
+            products: {
+                arlo: { name: "Arlo Pro 5", price: "34,800", story: "見えない場所を、確信に変える。", desc: "2K HDRの圧倒的な視界が、深夜の不安を解消します。", specs: [{v: "2K HDR", l: "VISION", d: "細部まで鮮明な映像。"}, {v: "160°", l: "VIEW", d: "広い視野で死角を最小限に。"}, {v: "夜間カラー", l: "NIGHT", d: "暗闇でも色彩を識別。"}, {v: "AI検知", l: "AI", d: "人、車、荷物を判別。"}, {v: "完全無線", l: "POWER", d: "配線不要の自由な設置。"}, {v: "防水防塵", l: "DURABILITY", d: "過酷な環境にも耐える。"} ] }
+            }
+        }
     };
 
-    function toggleMenu() {
-        const m = document.getElementById('overlayMenu');
+    let curCat = '';
+    function toggleMobileMenu() {
+        const m = document.getElementById('mobileMenu');
+        const t = document.getElementById('menuToggle');
         m.classList.toggle('active');
-        document.getElementById('b1').style.transform = m.classList.contains('active') ? 'rotate(45deg) translateY(4px)' : 'none';
-        document.getElementById('b2').style.transform = m.classList.contains('active') ? 'rotate(-45deg) translateY(-4px)' : 'none';
+        t.classList.toggle('active');
     }
 
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('overlayMenu').classList.remove('active');
+        document.getElementById('mobileMenu').classList.remove('active');
+        document.getElementById('menuToggle').classList.remove('active');
         
-        if(id === 'top') {
-            document.getElementById('top').classList.add('active');
-        } else if (db[id]) {
-            // リスト表示
-            document.getElementById('listTitle').innerText = id === 'cleaning' ? '掃除機' : id === 'lighting' ? '照明' : '防犯';
-            let html = '';
-            db[id].forEach(p => {
-                html += `<div class="card" onclick="showDetail('${id}', '${p.id}')">
-                    <h2>${p.name}</h2>
-                    <p class="price">${p.price}円〜</p>
-                    <span style="color:var(--アクセント)">詳しく見る ＞</span>
-                </div>`;
-            });
-            document.getElementById('listGrid').innerHTML = html;
-            document.getElementById('listPage').classList.add('active');
+        if(id === 'top') { document.getElementById('top').classList.add('active'); }
+        else {
+            const [cat, mode] = id.split('_'); curCat = cat; const data = database[cat];
+            if(mode === 'list') {
+                document.getElementById('catTitle').innerText = data.title;
+                document.getElementById('catSub').innerText = data.sub;
+                let html = ''; 
+                for(let k in data.products) { 
+                    const p = data.products[k];
+                    html += `<div class="product-card" onclick="showDetail('${cat}', '${k}')">
+                        <img src="https://via.placeholder.com/300x200?text=${p.name}">
+                        <h2>${p.name}</h2>
+                        <p class="price">${p.price}円〜</p>
+                        <span style="color:var(--アクセント)">詳しく見る ＞</span>
+                    </div>`;
+                }
+                document.getElementById('catGrid').innerHTML = html;
+                document.getElementById('catalogPage').classList.add('active');
+            } else {
+                const keys = Object.keys(data.products);
+                document.getElementById('selL').innerHTML = document.getElementById('selR').innerHTML = keys.map(k=>`<option value="${k}">${data.products[k].name}</option>`).join('');
+                document.getElementById('selR').selectedIndex = 1; renderCompare('L'); renderCompare('R');
+                document.getElementById('comparePage').classList.add('active');
+            }
         }
-        window.scrollTo(0,0);
+        window.scrollTo({top:0, behavior:'smooth'});
     }
 
     function showDetail(cat, pid) {
-        const p = db[cat].find(x => x.id === pid);
-        let specHtml = '';
-        for(let k in p.specs) {
-            specHtml += `<tr><td class="spec-key">${k}</td><td>${p.specs[k]}</td></tr>`;
-        }
+        const p = database[cat].products[pid];
+        let specHtml = p.specs.map(s => `
+            <div class="spec-item">
+                <span class="spec-val">${s.v}</span>
+                <span class="spec-label">${s.l}</span>
+                <p class="spec-desc">${s.d}</p>
+            </div>
+        `).join('');
+
         document.getElementById('detailContent').innerHTML = `
-            <div class="detail-hero">${p.name}</div>
-            <div class="detail-story">${p.story}</div>
-            <p style="line-height:1.8; margin-bottom:40px;">${p.desc}</p>
-            <a href="#" class="btn-buy">購入 - ${p.price}円</a>
-            <table class="spec-table">${specHtml}</table>
+            <div class="detail-view">
+                <div class="detail-hero-text">${p.name}</div>
+                <div class="detail-story-text">${p.story}</div>
+                <div class="experience-section">
+                    <div class="experience-content">
+                        <h3>知性が、日常を塗り替える。</h3>
+                        <p>${p.desc}</p>
+                        <button class="btn-blue" style="margin-top:40px;">今すぐ手に入れる - ${p.price}円</button>
+                    </div>
+                    <img src="https://via.placeholder.com/500x400?text=THE+EXPERIENCE" style="width:100%; border-radius:20px;">
+                </div>
+                <div style="text-align:center; margin-bottom:60px;"><h2>Technical Specifications</h2></div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+                    ${specHtml}
+                </div>
+            </div>
         `;
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('detailPage').classList.add('active');
-        window.scrollTo(0,0);
+        window.scrollTo({top:0, behavior:'smooth'});
     }
+
+    function renderCompare(s) {
+        const k = document.getElementById(`sel${s}`).value; const p = database[curCat].products[k];
+        document.getElementById(`col${s}`).innerHTML = `
+            <img src="https://via.placeholder.com/300x200?text=${p.name}" style="height:180px; object-fit:contain; margin-bottom:20px; width:100%;">
+            <div style="text-align:center; margin-bottom:30px;"><a href="#" class="btn-blue" style="font-size:12px;">購入</a></div>
+            ${p.specs.map(sp=>`<div class="spec-item"><span class="spec-val">${sp.v}</span><span class="spec-label">${sp.l}</span><p class="spec-desc">${sp.d}</p></div>`).join('')}`;
+    }
+
+    window.onscroll = () => { document.getElementById('bgGrid').style.transform = `translateY(${window.pageYOffset * 0.15}px)`; };
 </script>
 </body>
 </html>
+
 
 
 
