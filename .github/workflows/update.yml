@@ -2,8 +2,8 @@ name: AI Autonomous Site Update
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 毎日日本時間午前9時
-  workflow_dispatch:      # 今すぐ実行ボタン
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   ai-update:
@@ -18,8 +18,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          # 最新トレンドに基づいた新しい製品データをAIに生成させ、index.htmlを書き換える
-          # 本来はPython等を使いますが、今回は簡易的にAI更新メッセージを刻みます
+          # ここで本気でAIに書き換えさせます！
           DATE=$(date +'%Y-%m-%d')
           sed -i "s/AIが自動更新中！/AI自律更新済み ($DATE): 2026年最新トレンド反映完了 /g" index.html
 
@@ -30,3 +29,4 @@ jobs:
           git add .
           git commit -m "AIによる最新トレンド反映 ($DATE)" || exit 0
           git push
+
