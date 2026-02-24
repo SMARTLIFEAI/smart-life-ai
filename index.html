@@ -3,133 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>SMART HOME AI | Apple Experience</title>
+    <meta name="description" content="Smart Home AI - 次世代の知性が、あなたの暮らしを定義し直す。23の革新的なデバイスがここに。">
+    <title>Smart Home AI | 暮らしを、選ぶ。</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/views/compare.css">
+    <link rel="stylesheet" href="css/views/detail.css">
+    
+    <link rel="stylesheet" href="css/products/cleaning.css">
+    <link rel="stylesheet" href="css/products/lighting.css">
+    <link rel="stylesheet" href="css/products/security.css">
+
     <style>
-        /* --- 第2弾でお出ししたCSSをここに完全移植 --- */
+        /* index.html 固有のクリティカル・パス・スタイル */
         :root {
             --nav-height: 44px;
-            --color-nav-bg: rgba(251, 251, 253, 0.8);
-            --color-nav-border: rgba(0, 0, 0, 0.16);
-            --color-text: #1d1d1f;
-            --color-text-sub: #86868b;
-            --color-accent: #0066cc;
-            --color-bg: #ffffff;
-            --color-bg-alt: #f5f5f7;
+            --glass-bg: rgba(251, 251, 253, 0.8);
+            --color-apple-blue: #0066cc;
             --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
-            --ease-apple-spring: cubic-bezier(0.43, 0.05, 0.17, 1);
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        body { font-family: "SF Pro Display", "Noto Sans JP", sans-serif; background: var(--color-bg); color: var(--color-text); overflow-x: hidden; }
-
-        /* Navigation */
-        #global-nav { position: fixed; top: 0; width: 100%; height: var(--nav-height); background: var(--color-nav-bg); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--color-nav-border); z-index: 10000; }
-        .nav-wrapper { max-width: 1024px; margin: 0 auto; height: 100%; padding: 0 22px; }
-        .nav-list { display: flex; justify-content: space-between; align-items: center; list-style: none; height: 100%; }
-        .logo-text { font-size: 16px; font-weight: 600; cursor: pointer; }
-        .nav-link { font-size: 12px; text-decoration: none; color: var(--color-text); opacity: 0.8; cursor: pointer; }
-
-        /* Hamburger to X Physics */
-        .nav-toggle-btn { background: none; border: none; width: 44px; height: 44px; cursor: pointer; position: relative; }
-        .toggle-wrapper { position: absolute; top: 50%; left: 50%; width: 18px; height: 14px; transform: translate(-50%, -50%); }
-        .line { position: absolute; width: 18px; height: 1.2px; background: var(--color-text); transition: transform 0.4s var(--ease-apple-spring); }
-        .line-top { top: 0; } .line-bottom { bottom: 0; }
-        .nav-toggle-btn.active .line-top { transform: translateY(6.5px) rotate(45deg); }
-        .nav-toggle-btn.active .line-bottom { transform: translateY(-6.5px) rotate(-45deg); }
-
-        /* Mega Menu */
-        .mega-menu { position: fixed; top: 0; width: 100%; background: #fff; padding-top: var(--nav-height); transform: translateY(-100%); opacity: 0; visibility: hidden; z-index: 9999; transition: all 0.5s var(--ease-apple); border-bottom: 1px solid var(--nav-border); }
-        .mega-menu.active { transform: translateY(0); opacity: 1; visibility: visible; }
-        .mega-content-wrapper { max-width: 1000px; margin: 0 auto; padding: 40px; display: grid; grid-template-columns: 2fr 1fr; gap: 50px; }
-        .mega-product-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .mega-product-list a { font-size: 20px; font-weight: 600; text-decoration: none; color: var(--color-text); cursor: pointer; }
-
-        /* Views */
-        .view-section { display: none; opacity: 0; padding-top: var(--nav-height); transition: opacity 0.6s; }
-        .view-section.active { display: block; opacity: 1; }
-        .hero-module { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .category-module { height: 60vh; margin: 20px; border-radius: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: var(--color-bg-alt); }
-        
-        /* Reveal Animation */
-        .reveal { transform: translateY(30px); opacity: 0; transition: all 0.8s var(--ease-apple); }
-        .reveal.active { transform: translateY(0); opacity: 1; }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: "SF Pro JP", "SF Pro Text", "Myriad Set Pro", "Noto Sans JP", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #fff;
+            color: #1d1d1f;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
     </style>
 </head>
 <body>
 
-    <nav id="global-nav">
+    <nav id="global-nav" class="nav-standard">
         <div class="nav-wrapper">
             <ul class="nav-list">
-                <li onclick="Router.go('home')" class="logo-text">SMART HOME AI</li>
-                <li><a class="nav-link" onmouseenter="MegaMenu.show('cleaning')">掃除機</a></li>
-                <li><a class="nav-link" onmouseenter="MegaMenu.show('lighting')">照明</a></li>
-                <li><a class="nav-link" onmouseenter="MegaMenu.show('security')">防犯</a></li>
-                <li>
-                    <button id="nav-menu-toggle" class="nav-toggle-btn" onclick="MobileMenu.toggle()">
-                        <span class="toggle-wrapper"><span class="line line-top"></span><span class="line line-bottom"></span></span>
+                <li class="nav-item item-logo">
+                    <a href="#" onclick="Router.go('home')" aria-label="Smart Home AI ホーム">
+                        <svg class="logo-svg" width="18" height="18" viewBox="0 0 18 18">
+                            <path d="M9,0L0,7l1,1.5L9,2.5l8,6L18,7L9,0z M2,18h5v-6h4v6h5V8.5L9,3.5L2,8.5V18z"/>
+                        </svg>
+                    </a>
+                </li>
+                
+                <li class="nav-item item-link"><a href="javascript:void(0)" onmouseenter="MegaMenu.show('cleaning')">掃除機</a></li>
+                <li class="nav-item item-link"><a href="javascript:void(0)" onmouseenter="MegaMenu.show('lighting')">照明</a></li>
+                <li class="nav-item item-link"><a href="javascript:void(0)" onmouseenter="MegaMenu.show('security')">防犯</a></li>
+                <li class="nav-item item-link"><a href="javascript:void(0)" onclick="Router.go('compare')">比較</a></li>
+                <li class="nav-item item-link"><a href="javascript:void(0)" onclick="Router.go('support')">サポート</a></li>
+
+                <li class="nav-item item-search">
+                    <a href="javascript:void(0)" id="nav-search-btn" aria-label="検索">
+                        <svg width="15" height="15" viewBox="0 0 15 15"><path d="M14.62,13.47L10.74,9.6c0.85-1,1.36-2.28,1.36-3.68c0-3.15-2.55-5.7-5.7-5.7S0.7,2.77,0.7,5.92s2.55,5.7,5.7,5.7 c1.4,0,2.68-0.51,3.68-1.36l3.88,3.88L14.62,13.47z M6.4,10.61c-2.59,0-4.69-2.1-4.69-4.69c0-2.59,2.1-4.69,4.69-4.69 s4.69,2.1,4.69,4.69C11.09,8.51,8.99,10.61,6.4,10.61z"/></svg>
+                    </a>
+                </li>
+
+                <li class="nav-item item-menu">
+                    <button id="global-menu-trigger" class="menu-trigger" aria-expanded="false" onclick="MobileMenu.toggle()">
+                        <span class="trigger-bar bar-top"></span>
+                        <span class="trigger-bar bar-bottom"></span>
                     </button>
                 </li>
             </ul>
         </div>
-    </nav>
 
-    <div id="mega-menu-container" class="mega-menu" onmouseleave="MegaMenu.hide()">
-        <div id="mega-content-target" class="mega-content-wrapper"></div>
+        <div id="mega-menu-drawer" class="mega-drawer" onmouseleave="MegaMenu.hide()">
+            <div class="mega-drawer-content">
+                <div id="mega-grid-target" class="mega-grid">
+                    </div>
+            </div>
+        </div>
+    </nav>
+    <div id="mobile-nav-overlay" class="mobile-nav">
+        <div class="mobile-nav-wrapper">
+            <ul class="mobile-nav-list">
+                <li class="mobile-nav-item">
+                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('category', 'cleaning')">掃除機</a>
+                </li>
+                <li class="mobile-nav-item">
+                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('category', 'lighting')">照明</a>
+                </li>
+                <li class="mobile-nav-item">
+                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('category', 'security')">防犯</a>
+                </li>
+                <li class="mobile-nav-item">
+                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('compare')">モデルを比較する</a>
+                </li>
+                <li class="mobile-nav-item">
+                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('support')">サポート</a>
+                </li>
+            </ul>
+            
+            <div class="mobile-nav-featured">
+                <p class="featured-label">注目の製品</p>
+                <div id="mobile-featured-target">
+                    </div>
+            </div>
+        </div>
     </div>
 
-    <main id="main-content">
-        <div id="view-home" class="view-section active">
-            <div class="hero-module"><h1>暮らしを、選ぶ。</h1><p>理想の知性を、あなたの家へ。</p></div>
-            <div class="category-module" onclick="Router.go('category', 'cleaning')"><h2>掃除機</h2></div>
-            <div class="category-module" style="background:#000; color:#fff" onclick="Router.go('category', 'lighting')"><h2>照明</h2></div>
-            <div class="category-module" onclick="Router.go('category', 'security')"><h2>防犯</h2></div>
-        </div>
-        <div id="view-category" class="view-section">
-            <div style="padding: 60px 40px;"><h1 id="cat-title"></h1><div id="product-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px; margin-top:40px;"></div></div>
-        </div>
-        <div id="view-detail" class="view-section"><div id="detail-target"></div></div>
+    <main id="view-container">
+        <section id="view-home" class="view-section active">
+            <div id="hero-mount-point"></div>
+            <div id="bento-mount-point"></div>
+        </section>
+
+        <section id="view-category" class="view-section">
+            <header class="category-header">
+                <div class="section-container">
+                    <h1 id="cat-title" class="reveal-node"></h1>
+                    <p id="cat-subtitle" class="reveal-node delay-1"></p>
+                </div>
+            </header>
+            <div id="category-grid" class="product-grid section-container">
+                </div>
+        </section>
+
+        <section id="view-detail" class="view-section">
+            <div id="detail-mount-point">
+                </div>
+        </section>
+
+        <section id="view-compare" class="view-section">
+            <div id="compare-mount-point">
+                </div>
+        </section>
+
+        <section id="view-support" class="view-section">
+            <div id="support-mount-point" class="section-container"></div>
+        </section>
     </main>
 
-    <script>
-        const DB = {
-            cleaning: { title: "掃除機", items: { r10: "Roomba 10 Max", rj9: "Roomba j9+", ri5: "Roomba i5+", rs8: "Roborock S8 MaxV", rqr: "Roborock Q Revo", ex1: "Eufy X10 Pro", es1: "Eufy S1 Pro", dvs: "Dyson Vis Nav", prs: "Panasonic RSF1000", sk1: "SwitchBot K10+" } },
-            lighting: { title: "照明", items: { hwg: "Hue White", hfc: "Hue Full Color", hpb: "Hue Play", nsh: "Nanoleaf Shapes", nes: "Nanoleaf Essentials", scl: "SwitchBot Ceiling", itr: "IKEA TRÅDFRI" } },
-            security: { title: "防犯", items: { ap5: "Arlo Pro 5", au2: "Arlo Ultra 2", ngc: "Google Nest Cam", ngd: "Google Nest Doorbell", rbd: "Ring Doorbell Plus", es3: "Eufy SoloCam S340" } }
-        };
+    <footer id="global-footer">
+        <div class="footer-content section-container">
+            <nav class="footer-directory" aria-label="Smart Home AI ディレクトリ">
+                </nav>
+            <section class="footer-legal">
+                <div class="footer-legal-shop">
+                    その他の購入方法：お近くのSmart Home AI Store、または販売店をお探しください。
+                </div>
+                <div class="footer-legal-copyright">
+                    Copyright © 2026 Smart Home AI Inc. All rights reserved.
+                    <div class="footer-legal-links">
+                        <a href="#">プライバシーポリシー</a>
+                        <a href="#">利用規約</a>
+                        <a href="#">販売条件</a>
+                        <a href="#">サイトマップ</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </footer>
 
-        const Router = {
-            go(view, param) {
-                document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-                document.getElementById('view-' + view).classList.add('active');
-                if(view === 'category') this.renderCat(param);
-                if(view === 'detail') this.renderDet(param);
-                window.scrollTo(0,0);
-            },
-            renderCat(id) {
-                document.getElementById('cat-title').innerText = DB[id].title;
-                const grid = document.getElementById('product-grid');
-                grid.innerHTML = Object.keys(DB[id].items).map(k => `<div class="category-module" style="height:200px" onclick="Router.go('detail','${k}')"><h3>${DB[id].items[k]}</h3></div>`).join('');
-            },
-            renderDet(id) {
-                document.getElementById('detail-target').innerHTML = `<div class="hero-module"><h1>製品詳細: ${id}</h1><p>Apple品質のスペック表とストーリーがここに展開されます。</p></div>`;
-            }
-        };
+    <script src="js/database/cleaning.db.js"></script>
+    <script src="js/database/lighting.db.js"></script>
+    <script src="js/database/security.db.js"></script>
 
-        const MegaMenu = {
-            show(id) {
-                const target = document.getElementById('mega-content-target');
-                target.innerHTML = `<div><h2 style="font-size:12px; color:#86868b; margin-bottom:20px;">モデルをすべて見る</h2><div class="mega-product-list">${Object.keys(DB[id].items).map(k => `<a onclick="Router.go('detail','${k}')">${DB[id].items[k]}</a>`).join('')}</div></div>`;
-                document.getElementById('mega-menu-container').classList.add('active');
-            },
-            hide() { document.getElementById('mega-menu-container').classList.remove('active'); }
-        };
+    <script src="js/engines/reveal.js"></script>
+    <script src="js/engines/parallax.js"></script>
+    <script src="js/engines/compare.js"></script>
 
-        const MobileMenu = {
-            toggle() { document.getElementById('nav-menu-toggle').classList.toggle('active'); }
-        };
-    </script>
+    <script src="js/components/header.js"></script>
+    <script src="js/components/footer.js"></script>
+    
+    <script src="js/app.js"></script>
+
 </body>
 </html>
+
 
 
 
