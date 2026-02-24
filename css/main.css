@@ -1,0 +1,254 @@
+/* * ==========================================
+ * SMART HOME AI - MASTER DESIGN SYSTEM
+ * 1万行規模のプロジェクトを統制する最上位CSS
+ * ==========================================
+ */
+
+/* 1. DESIGN TOKENS (CSS VARIABLES)
+ * AppleのHuman Interface Guidelinesに基づき、
+ * 1px、1%の色の深みにまでこだわった変数定義。
+ */
+:root {
+    /* Color Palette - Neutrals */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-apple-gray-light: #f5f5f7;
+    --color-apple-gray: #fbfbfd;
+    --color-apple-gray-dark: #86868b;
+    --color-apple-text: #1d1d1f;
+    --color-apple-text-secondary: #6e6e73;
+    --color-apple-border: #d2d2d7;
+
+    /* Color Palette - Accents */
+    --color-apple-blue: #0066cc;
+    --color-apple-blue-light: #0071e3;
+    --color-apple-green: #34c759;
+    --color-apple-red: #ff3b30;
+
+    /* Semantic Colors */
+    --bg-glass: rgba(251, 251, 253, 0.8);
+    --bg-glass-dark: rgba(22, 22, 23, 0.8);
+
+    /* Typography - Fluid Sizing System
+     * 画面幅に応じてタイポグラフィが有機的に変化する計算式
+     */
+    --font-base: "SF Pro JP", "SF Pro Text", "Myriad Set Pro", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
+    --size-hero: clamp(48px, 10vw, 120px);
+    --size-headline: clamp(40px, 8vw, 80px);
+    --size-subheadline: clamp(21px, 4vw, 32px);
+    --size-body: 17px;
+    --size-caption: 14px;
+
+    /* Layout & Spacing */
+    --max-width: 980px;
+    --max-width-large: 1200px;
+    --gutter: 22px;
+    --nav-height: 44px;
+
+    /* Animation & Ease
+     * Apple独自の「物理的な加速感」を再現するベジェ曲線
+     */
+    --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+    --ease-apple-spring: cubic-bezier(0.43, 0.05, 0.17, 1);
+    --transition-standard: 0.4s var(--ease-apple);
+    --transition-slow: 0.8s var(--ease-apple);
+}
+
+/* 2. RESET & BASE ELEMENTS
+ * ブラウザの個性を消し、Appleデバイスのような均一な質感を付与。
+ */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-base);
+    background-color: var(--color-white);
+    color: var(--color-apple-text);
+    line-height: 1.47059;
+    font-weight: 400;
+    letter-spacing: -0.022em;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Layout Helpers */
+.section-container {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+
+.section-container-large {
+    max-width: var(--max-width-large);
+}
+
+/* Typography Styles */
+h1, h2, h3, h4, p, a {
+    text-rendering: optimizeLegibility;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition-standard);
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 3. CORE UI COMPONENTS (The Basics) */
+.cta-button {
+    display: inline-block;
+    background-color: var(--color-apple-blue);
+    color: var(--color-white);
+    padding: 8px 16px;
+    border-radius: 980px;
+    font-size: var(--size-caption);
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s ease;
+}
+
+.cta-button:hover {
+    background-color: var(--color-apple-blue-light);
+}
+
+.cta-link {
+    color: var(--color-apple-blue);
+    font-size: 17px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cta-link::after {
+    content: "〉";
+    font-size: 0.7em;
+    transition: transform 0.3s var(--ease-apple);
+}
+
+.cta-link:hover::after {
+    transform: translateX(3px);
+}
+/* 4. LAYOUT SYSTEM & GRID ARCHITECTURE
+ * 23機種のカードを、画面サイズに応じて有機的に再配置するための
+ * 高度なグリッドロジック。
+ */
+
+/* モジュール間の垂直方向の余白（Apple標準の80px〜120pxを維持） */
+.section-padding {
+    padding-top: clamp(80px, 10vw, 120px);
+    padding-bottom: clamp(80px, 10vw, 120px);
+}
+
+/* 汎用グリッドシステム：23機種を網羅するための柔軟な設計 */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 22px;
+    width: 100%;
+}
+
+/* カードの基本構造（物理的な質感を伴う影と背景） */
+.p-card {
+    grid-column: span 12; /* デフォルトは全幅 */
+    background-color: var(--color-apple-gray-light);
+    border-radius: 28px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px;
+    min-height: 500px;
+    transition: transform 0.6s var(--ease-apple), box-shadow 0.6s var(--ease-apple);
+}
+
+/* ホバー時の物理挙動：1px単位の浮き沈み */
+.p-card:hover {
+    transform: scale(1.005);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+}
+
+/* カードバリエーション：2列、3列の制御 */
+@media (min-width: 734px) {
+    .p-card-half { grid-column: span 6; }
+    .p-card-third { grid-column: span 4; }
+}
+
+/* 5. ADVANCED ANIMATION ENGINE (CORE)
+ * Apple公式サイトの「生命感」を司る、Scroll Revealの基礎スタイル。
+ * すべての要素に一律ではなく、delayクラスを組み合わせて流動性を作る。
+ */
+
+.reveal-node {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.2s var(--ease-apple), transform 1.2s var(--ease-apple);
+    will-change: transform, opacity;
+}
+
+.reveal-node.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 狂気的な遅延調整：23機種を順次表示させるための10段階ディレイ */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+.delay-7 { transition-delay: 0.7s; }
+.delay-8 { transition-delay: 0.8s; }
+.delay-9 { transition-delay: 0.9s; }
+.delay-10 { transition-delay: 1.0s; }
+
+/* 6. COMMON VIEW ELEMENTS
+ * 比較画面や詳細画面で共通して使用される背景やブラー効果。
+ */
+
+.glass-panel {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* テキストのグラデーション効果（一部のハイエンドモデル用） */
+.text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(180deg, #1d1d1f 0%, #6e6e73 100%);
+}
+
+/* 7. VISUAL ACCESSIBILITY
+ * 視覚的な快適さを保つための、高解像度ディスプレイ向け調整。
+ */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+        font-weight: 400; /* 高精細画面での可読性向上 */
+    }
+}
