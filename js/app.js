@@ -1,3 +1,18 @@
+// js/app.js の一番上にこれを上書きしてください
+document.addEventListener('DOMContentLoaded', () => {
+    // データベースが読み込まれているかチェック
+    if (typeof CLEANING_DATABASE === 'undefined') {
+        console.error("Database not found. Retrying...");
+        setTimeout(initApp, 500); // 0.5秒待って再試行
+    } else {
+        initApp();
+    }
+});
+
+function initApp() {
+    // 既存の launchApp や初期化処理
+    launchApp();
+}
 /**
  * ==========================================
  * SMART HOME AI - MAIN APPLICATION ENGINE
