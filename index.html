@@ -2,182 +2,71 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Smart Home AI - 次世代の知性が、あなたの暮らしを定義し直す。23の革新的なデバイスがここに。">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Home AI | 暮らしを、選ぶ。</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/navigation.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/views/compare.css">
-    <link rel="stylesheet" href="css/views/detail.css">
-    
+    <link rel="stylesheet" href="css/core.css">
+    <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/products/cleaning.css">
     <link rel="stylesheet" href="css/products/lighting.css">
     <link rel="stylesheet" href="css/products/security.css">
-
-    <style>
-        /* index.html 固有のクリティカル・パス・スタイル */
-        :root {
-            --nav-height: 44px;
-            --glass-bg: rgba(251, 251, 253, 0.8);
-            --color-apple-blue: #0066cc;
-            --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
-        }
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: "SF Pro JP", "SF Pro Text", "Myriad Set Pro", "Noto Sans JP", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background-color: #fff;
-            color: #1d1d1f;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-    </style>
 </head>
 <body>
 
-    <nav id="global-nav" class="nav-standard">
-        <div class="nav-wrapper">
-            <ul class="nav-list">
-                <li class="nav-item item-logo">
-                    <a href="#" onclick="Router.go('home')" aria-label="Smart Home AI ホーム">
-                        <svg class="logo-svg" width="18" height="18" viewBox="0 0 18 18">
-                            <path d="M9,0L0,7l1,1.5L9,2.5l8,6L18,7L9,0z M2,18h5v-6h4v6h5V8.5L9,3.5L2,8.5V18z"/>
-                        </svg>
-                    </a>
-                </li>
-                
-                <li class="nav-item item-link"><a href="javascript:void(0)" onmouseenter="MegaMenu.show('cleaning')">掃除機</a></li>
-                <li class="nav-item item-link"><a href="javascript:void(0)" onmouseenter="MegaMenu.show('lighting')">照明</a></li>
-                <li class="nav-item item-link"><a href="javascript:void(0)" onmouseenter="MegaMenu.show('security')">防犯</a></li>
-                <li class="nav-item item-link"><a href="javascript:void(0)" onclick="Router.go('compare')">比較</a></li>
-                <li class="nav-item item-link"><a href="javascript:void(0)" onclick="Router.go('support')">サポート</a></li>
+    <nav id="global-nav">
+        <div class="nav-content">
+            <a href="#" class="nav-home">
+                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M16.19 12.75L9 6.25l-7.19 6.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </a>
 
-                <li class="nav-item item-search">
-                    <a href="javascript:void(0)" id="nav-search-btn" aria-label="検索">
-                        <svg width="15" height="15" viewBox="0 0 15 15"><path d="M14.62,13.47L10.74,9.6c0.85-1,1.36-2.28,1.36-3.68c0-3.15-2.55-5.7-5.7-5.7S0.7,2.77,0.7,5.92s2.55,5.7,5.7,5.7 c1.4,0,2.68-0.51,3.68-1.36l3.88,3.88L14.62,13.47z M6.4,10.61c-2.59,0-4.69-2.1-4.69-4.69c0-2.59,2.1-4.69,4.69-4.69 s4.69,2.1,4.69,4.69C11.09,8.51,8.99,10.61,6.4,10.61z"/></svg>
-                    </a>
-                </li>
+            <div class="nav-menu-center">
+                <a href="#cleaning">掃除機</a>
+                <a href="#lighting">照明</a>
+                <a href="#security">防犯</a>
+                <a href="#comparison">比較</a>
+            </div>
 
-                <li class="nav-item item-menu">
-                    <button id="global-menu-trigger" class="menu-trigger" aria-expanded="false" onclick="MobileMenu.toggle()">
-                        <span class="trigger-bar bar-top"></span>
-                        <span class="trigger-bar bar-bottom"></span>
-                    </button>
-                </li>
-            </ul>
+            <button id="global-menu-trigger" class="menu-trigger-wrapper">
+                <span class="menu-bar bar-top"></span>
+                <span class="menu-bar bar-bottom"></span>
+            </button>
         </div>
 
-        <div id="mega-menu-drawer" class="mega-drawer" onmouseleave="MegaMenu.hide()">
-            <div class="mega-drawer-content">
-                <div id="mega-grid-target" class="mega-grid">
+        <div id="global-nav-dropdown" class="nav-dropdown">
+            <div class="dropdown-content">
+                <div class="mobile-nav-featured">
                     </div>
             </div>
         </div>
     </nav>
-    <div id="mobile-nav-overlay" class="mobile-nav">
-        <div class="mobile-nav-wrapper">
-            <ul class="mobile-nav-list">
-                <li class="mobile-nav-item">
-                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('category', 'cleaning')">掃除機</a>
-                </li>
-                <li class="mobile-nav-item">
-                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('category', 'lighting')">照明</a>
-                </li>
-                <li class="mobile-nav-item">
-                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('category', 'security')">防犯</a>
-                </li>
-                <li class="mobile-nav-item">
-                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('compare')">モデルを比較する</a>
-                </li>
-                <li class="mobile-nav-item">
-                    <a href="javascript:void(0)" class="mobile-nav-link" onclick="Router.go('support')">サポート</a>
-                </li>
-            </ul>
-            
-            <div class="mobile-nav-featured">
-                <p class="featured-label">注目の製品</p>
-                <div id="mobile-featured-target">
-                    </div>
-            </div>
-        </div>
-    </div>
 
-    <main id="view-container">
-        <section id="view-home" class="view-section active">
-            <div id="hero-mount-point"></div>
-            <div id="bento-mount-point"></div>
-        </section>
-
-        <section id="view-category" class="view-section">
-            <header class="category-header">
-                <div class="section-container">
-                    <h1 id="cat-title" class="reveal-node"></h1>
-                    <p id="cat-subtitle" class="reveal-node delay-1"></p>
-                </div>
-            </header>
-            <div id="category-grid" class="product-grid section-container">
-                </div>
-        </section>
-
-        <section id="view-detail" class="view-section">
-            <div id="detail-mount-point">
-                </div>
-        </section>
-
-        <section id="view-compare" class="view-section">
-            <div id="compare-mount-point">
-                </div>
-        </section>
-
-        <section id="view-support" class="view-section">
-            <div id="support-mount-point" class="section-container"></div>
-        </section>
-    </main>
+    <main id="main-content">
+        </main>
 
     <footer id="global-footer">
-        <div class="footer-content section-container">
-            <nav class="footer-directory" aria-label="Smart Home AI ディレクトリ">
+        <div class="footer-content">
+            <nav id="global-footer-links">
                 </nav>
-            <section class="footer-legal">
-                <div class="footer-legal-shop">
-                    その他の購入方法：お近くのSmart Home AI Store、または販売店をお探しください。
+            <div class="footer-legal">
+                <div class="legal-links">
+                    <span>プライバシーポリシー</span>
+                    <span>利用規約</span>
+                    <span>販売条件</span>
+                    <span>サイトマップ</span>
                 </div>
-                <div class="footer-legal-copyright">
-                    Copyright © 2026 Smart Home AI Inc. All rights reserved.
-                    <div class="footer-legal-links">
-                        <a href="#">プライバシーポリシー</a>
-                        <a href="#">利用規約</a>
-                        <a href="#">販売条件</a>
-                        <a href="#">サイトマップ</a>
-                    </div>
-                </div>
-            </section>
+                <p class="copyright">Copyright © 2026 Smart Home AI Inc. All rights reserved.</p>
+            </div>
         </div>
     </footer>
+
+    <div id="mobile-nav-overlay"></div>
 
     <script src="js/database/cleaning.db.js"></script>
     <script src="js/database/lighting.db.js"></script>
     <script src="js/database/security.db.js"></script>
-
-    <script src="js/engines/reveal.js"></script>
-    <script src="js/engines/parallax.js"></script>
-    <script src="js/engines/compare.js"></script>
-
-    <script src="js/components/header.js"></script>
-    <script src="js/components/footer.js"></script>
-    
     <script src="js/app.js"></script>
-
 </body>
 </html>
+
 
 
 
